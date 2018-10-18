@@ -79,7 +79,7 @@ func checkError(err error) {
 
 func (h simpleHTTPServer) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	log.Printf("%s  \"%s %s %s\"", r.RemoteAddr, r.Method, r.URL.String(), r.Proto)
-	t, err := template.ParseFiles("fileList.html")
+	t, err := template.ParseFiles("templates/fileList.html")
 	checkError(err)
 	switch r.Method {
 	case http.MethodGet:
@@ -167,7 +167,7 @@ func (h simpleHTTPServer) post(w http.ResponseWriter, r *http.Request, t *templa
 	f, err := os.OpenFile(absPath, os.O_WRONLY|os.O_CREATE, 0666)
 	checkError(err)
 	io.Copy(f, file)
-	resultPage, err := template.ParseFiles("uploaded.html")
+	resultPage, err := template.ParseFiles("templates/uploaded.html")
 	checkError(err)
 	data := struct {
 		Filename string
