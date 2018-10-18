@@ -3,11 +3,25 @@
 
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/css/style.css">
     <title>Upload Result Page</title>
 </head>
 
 <body>
-    <h1>Upload Result Page</h1>
-    <hr>
-    <strong>Success:</strong>&nbsp;File '{{ .Filename }}' upload success!<br><a href="{{ .Referer }}">Back</a>
+    <div class="container">
+        <div class="card" style="margin-top: 30px;">
+            <div class="card-header">
+                Upload Result Page
+            </div>
+            <div class="card-body">
+                <h5 class="card-title">Success</h5>
+                <p class="card-text">File '{{ .Filename }}' upload success!</p>
+                <a href="{{ .Referer }}" class="btn btn-primary">Back</a>
+            </div>
+        </div>
+    </div>
 </body>
+
+</html>

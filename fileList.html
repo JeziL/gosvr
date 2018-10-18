@@ -3,20 +3,50 @@
 
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/css/style.css">
     <title>Directory listing for {{ .Path }}</title>
 </head>
 
 <body>
-    <h1>Directory listing for {{ .Path }}</h1>
-    <hr>
-    <form ENCTYPE="multipart/form-data" method="post"><input name="file" type="file" /><input type="submit" value="upload" /></form>
-    <hr>
-    <ul>
-        {{range .Items}}
-        <li><a href="{{ .URL }}">{{ .Filename }}</a></li>
-        {{ end }}
-    </ul>
-    <hr>
+    <div class="container">
+        <div class="page-header">
+            <h2>Directory listing for {{ .Path }}</h2>
+        </div>
+        
+        <div class="card" style="margin-bottom: 40px;">
+            <div class="card-header">
+                    <form ENCTYPE="multipart/form-data" method="post">
+                        <div class="input-group">
+                            <div class="custom-file">
+                                <input name="file" type="file" class="custom-file-input" id="inputGroupFile" />
+                                <label class="custom-file-label" for="inputGroupFile">Choose file ...</label>
+                            </div>
+                            <div class="input-group-append">
+                                <input class="btn btn-primary" type="submit" value="Upload" />
+                            </div>
+                        </div>
+                    </form>
+            </div>
+            <ul class="list-group list-group-flush">
+                {{range .Items}}
+                <li class="list-group-item"><a href="{{ .URL }}">{{ .Filename }}</a></li>
+                {{ end }}
+            </ul>
+        </div>
+        <p class="footer">Powered by <a href="https://github.com/JeziL/gosvr" target="_blank">gosvr</a>.</p>
+    </div>
+    
+    <script src="/js/jquery-3.2.1.slim.min.js"></script>
+    <script src="/js/popper.min.js"></script>
+    <script src="/js/bootstrap.min.js"></script>
+    <script>
+        $('#inputGroupFile').on('change', function () {
+            var fileName = $(this).val().split('/').pop().split('\\').pop();
+            $(this).next('.custom-file-label').html(fileName);
+        })
+    </script>
 </body>
 
 </html>
