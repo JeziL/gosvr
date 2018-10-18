@@ -20,10 +20,12 @@ type simpleHTTPServer struct {
 }
 
 type aFile struct {
-	URL      string
-	Filename string
-	Mode     string
-	Size     string
+	URL       string
+	Filename  string
+	Size      string
+	IsDir     bool
+	IsSymlink bool
+	IsFile    bool
 }
 
 type aDir struct {
@@ -101,18 +103,22 @@ func (h simpleHTTPServer) getFiles(filePath string) []aFile {
 	for _, f := range files {
 		url := path.Join(filePath, f.Name())
 		item := aFile{
-			URL:      url,
-			Filename: f.Name(),
-			Mode:     "file",
-			Size:     "",
+			URL:       url,
+			Filename:  f.Name(),
+			IsDir:     false,
+			IsFile:    true,
+			IsSymlink: false,
+			Size:      "",
 		}
 		if f.IsDir() {
 			item.Filename += "/"
-			item.Mode = "dir"
+			item.IsDir = true
+			item.IsFile = false
 		} else {
 			if f.Mode()&os.ModeSymlink != 0 {
 				item.Filename += "@"
-				item.Mode = "sym"
+				item.IsSymlink = true
+				item.IsFile = false
 			}
 			item.Size = byteToString(f.Size())
 		}

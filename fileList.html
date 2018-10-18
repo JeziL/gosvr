@@ -5,6 +5,7 @@
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <link rel="stylesheet" href="/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/assets/iconfont/material-icons.css">
     <link rel="stylesheet" href="/css/style.css">
     <title>Directory listing for {{ .Path }}</title>
 </head>
@@ -33,6 +34,17 @@
                 {{range .Items}}
                 <li class="d-flex flex-row list-group-item">
                     <div class="p-10">
+                        <i class="material-icons">
+                            {{ if .IsFile }}
+                            &#xE8D2;
+                            {{ end }}
+                            {{ if .IsDir }}
+                            &#xE2C8;
+                            {{ end }}
+                            {{ if .IsSymlink }}
+                            <div class="icon-flip">&#xE15E;</div>
+                            {{ end }}
+                        </i>
                         <a href="{{ .URL }}">{{ .Filename }}</a>
                     </div>
                     <div class="ml-auto p-2 file-size">{{ .Size }}</div>

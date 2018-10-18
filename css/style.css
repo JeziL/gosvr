@@ -19,3 +19,18 @@
     padding: 0!important;
     font-size: .9rem;
 }
+
+.material-icons {
+    font-size: 22px;
+    vertical-align: middle;
+    margin-right: 2px;
+}
+
+.icon-flip {
+    display: inline-block;
+    -moz-transform: scale(-1, 1);
+    -webkit-transform: scale(-1, 1);
+    -o-transform: scale(-1, 1);
+    -ms-transform: scale(-1, 1);
+    transform: scale(-1, 1);
+}
