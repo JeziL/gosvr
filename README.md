@@ -16,5 +16,5 @@ optional arguments:
 
 ## Powered by
 
-- [Bootstrap](https://getbootstrap.com/)
+- [Bootstrap](https://getbootstrap.com/) (along with [JQuery](https://jquery.com/) and [Popper.js](https://popper.js.org/) used by it)
 - [Material Design icons by Google](https://github.com/google/material-design-icons)
