@@ -15,6 +15,8 @@ import (
 	"time"
 )
 
+const _Version = "0.9.0"
+
 type simpleHTTPServer struct {
 	Root string
 }
@@ -29,8 +31,9 @@ type aFile struct {
 }
 
 type aDir struct {
-	Path  string
-	Items []aFile
+	Path    string
+	Items   []aFile
+	Version string
 }
 
 func isDir(filePath string) bool {
@@ -137,8 +140,9 @@ func (h simpleHTTPServer) get(w http.ResponseWriter, r *http.Request, t *templat
 	if isDir(absPath) {
 		items := h.getFiles(filePath)
 		data := aDir{
-			Path:  filePath,
-			Items: items,
+			Path:    filePath,
+			Items:   items,
+			Version: _Version,
 		}
 		err := t.Execute(w, data)
 		checkError(err)
@@ -172,9 +176,11 @@ func (h simpleHTTPServer) post(w http.ResponseWriter, r *http.Request, t *templa
 	data := struct {
 		Filename string
 		Referer  string
+		Version  string
 	}{
 		Filename: absPath,
 		Referer:  r.Header.Get("Referer"),
+		Version:  _Version,
 	}
 	err = resultPage.Execute(w, data)
 	checkError(err)
