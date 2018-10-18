@@ -16,6 +16,13 @@
             <h2>Directory listing for {{ .Path }}</h2>
         </div>
 
+        <div class="alert alert-warning  alert-dismissible fade show" style="display: none;" role="alert">
+            <b>No file selected.</b> Please choose a file first.
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+
         <div class="card" style="margin-bottom: 40px;">
             <div class="card-header">
                 <form ENCTYPE="multipart/form-data" method="post">
@@ -62,7 +69,13 @@
         $('#inputGroupFile').on('change', function () {
             var fileName = $(this).val().split('/').pop().split('\\').pop();
             $(this).next('.custom-file-label').html(fileName);
-        })
+        });
+        $('input[type=submit]').on('click', function () {
+            if ($('.custom-file-label').html() == "Choose file ...") {
+                $('div.alert').css("display", "block");
+                return false;
+            }
+        });
     </script>
 </body>
 
