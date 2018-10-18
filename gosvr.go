@@ -13,6 +13,7 @@ import (
 	"os"
 	"path"
 	"strconv"
+	"strings"
 	"time"
 )
 
@@ -134,6 +135,10 @@ func (h simpleHTTPServer) getFiles(filePath string) []aFile {
 
 func (h simpleHTTPServer) get(w http.ResponseWriter, r *http.Request, t *template.Template) {
 	filePath := r.URL.String()
+	if strings.HasPrefix(filePath, "/gosvrstatic/") {
+		http.StripPrefix("/gosvrstatic/", http.FileServer(h.Box)).ServeHTTP(w, r)
+		return
+	}
 	absPath := h.absPath(filePath)
 	if _, err := os.Stat(absPath); os.IsNotExist(err) {
 		w.WriteHeader(404)
