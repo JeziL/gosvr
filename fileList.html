@@ -1,0 +1,22 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <title>Directory listing for {{ .Path }}</title>
+</head>
+
+<body>
+    <h1>Directory listing for {{ .Path }}</h1>
+    <hr>
+    <form ENCTYPE="multipart/form-data" method="post"><input name="file" type="file" /><input type="submit" value="upload" /></form>
+    <hr>
+    <ul>
+        {{range .Items}}
+        <li><a href="{{ .URL }}">{{ .Filename }}</a></li>
+        {{ end }}
+    </ul>
+    <hr>
+</body>
+
+</html>
