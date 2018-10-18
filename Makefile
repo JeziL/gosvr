@@ -12,6 +12,7 @@ static: ds
 
 clean: ds
 	rm -f gosvr
+	rm -rf release
 
 cleanstatic: ds
 	rm -f *packr.go

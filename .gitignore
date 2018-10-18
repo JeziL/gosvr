@@ -3,3 +3,5 @@ gosvr
 test*
 .idea/
 *packr.go
+release/
+build.sh
