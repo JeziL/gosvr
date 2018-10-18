@@ -92,6 +92,9 @@ func (h simpleHTTPServer) getFiles(filePath string) []aFile {
 		if f.IsDir() {
 			item.Filename += "/"
 		}
+		if f.Mode()&os.ModeSymlink != 0 {
+			item.Filename += "@"
+		}
 		items = append(items, item)
 	}
 	return items
