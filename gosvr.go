@@ -10,6 +10,7 @@ import (
 	"log"
 	"mime"
 	"net/http"
+	"net/url"
 	"os"
 	"path"
 	"strconv"
@@ -135,6 +136,8 @@ func (h simpleHTTPServer) getFiles(filePath string) []aFile {
 
 func (h simpleHTTPServer) get(w http.ResponseWriter, r *http.Request, t *template.Template) {
 	filePath := r.URL.String()
+	filePath, err := url.QueryUnescape(filePath)
+	checkError(err)
 	if strings.HasPrefix(filePath, "/gosvrstatic/") {
 		http.StripPrefix("/gosvrstatic/", http.FileServer(h.Box)).ServeHTTP(w, r)
 		return
