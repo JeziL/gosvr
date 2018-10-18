@@ -3,6 +3,7 @@ package main
 import (
 	"flag"
 	"fmt"
+	"github.com/gobuffalo/packr"
 	"html/template"
 	"io"
 	"io/ioutil"
@@ -19,6 +20,7 @@ const _Version = "0.9.0"
 
 type simpleHTTPServer struct {
 	Root string
+	Box  packr.Box
 }
 
 type aFile struct {
@@ -82,7 +84,7 @@ func checkError(err error) {
 
 func (h simpleHTTPServer) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	log.Printf("%s  \"%s %s %s\"", r.RemoteAddr, r.Method, r.URL.String(), r.Proto)
-	t, err := template.ParseFiles("static/templates/fileList.html")
+	t, err := template.New("fileList").Parse(h.Box.String("templates/fileList.html"))
 	checkError(err)
 	switch r.Method {
 	case http.MethodGet:
@@ -171,7 +173,7 @@ func (h simpleHTTPServer) post(w http.ResponseWriter, r *http.Request, t *templa
 	f, err := os.OpenFile(absPath, os.O_WRONLY|os.O_CREATE, 0666)
 	checkError(err)
 	io.Copy(f, file)
-	resultPage, err := template.ParseFiles("static/templates/uploaded.html")
+	resultPage, err := template.New("uploaded").Parse(h.Box.String("templates/uploaded.html"))
 	checkError(err)
 	data := struct {
 		Filename string
@@ -191,9 +193,10 @@ func main() {
 	var port = flag.String("p", "8080", "Port number of the HTTP service.")
 	flag.Parse()
 
+	box := packr.NewBox("./static")
 	server := &http.Server{
 		Addr:           ":" + *port,
-		Handler:        &simpleHTTPServer{Root: *dir},
+		Handler:        &simpleHTTPServer{Root: *dir, Box: box},
 		ReadTimeout:    10 * time.Second,
 		WriteTimeout:   10 * time.Second,
 		MaxHeaderBytes: 1 << 20,

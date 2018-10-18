@@ -2,3 +2,4 @@
 gosvr
 test*
 .idea/
+*packr.go
