@@ -14,3 +14,8 @@
     color: #999;
     text-decoration: underline;
 }
+
+.file-size {
+    padding: 0!important;
+    font-size: .9rem;
+}

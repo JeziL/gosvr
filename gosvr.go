@@ -22,6 +22,8 @@ type simpleHTTPServer struct {
 type aFile struct {
 	URL      string
 	Filename string
+	Mode     string
+	Size     string
 }
 
 type aDir struct {
@@ -52,6 +54,19 @@ func guessType(ext string) string {
 		}
 	}
 	return mimeType
+}
+
+func byteToString(b int64) string {
+	const unit = 1000
+	if b < unit {
+		return fmt.Sprintf("%d B", b)
+	}
+	div, exp := int64(unit), 0
+	for n := b / unit; n >= unit; n /= unit {
+		div *= unit
+		exp++
+	}
+	return fmt.Sprintf("%.1f %cB", float64(b)/float64(div), "KMGTPE"[exp])
 }
 
 func checkError(err error) {
@@ -88,12 +103,18 @@ func (h simpleHTTPServer) getFiles(filePath string) []aFile {
 		item := aFile{
 			URL:      url,
 			Filename: f.Name(),
+			Mode:     "file",
+			Size:     "",
 		}
 		if f.IsDir() {
 			item.Filename += "/"
-		}
-		if f.Mode()&os.ModeSymlink != 0 {
-			item.Filename += "@"
+			item.Mode = "dir"
+		} else {
+			if f.Mode()&os.ModeSymlink != 0 {
+				item.Filename += "@"
+				item.Mode = "sym"
+			}
+			item.Size = byteToString(f.Size())
 		}
 		items = append(items, item)
 	}

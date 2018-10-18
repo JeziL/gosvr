@@ -14,30 +14,35 @@
         <div class="page-header">
             <h2>Directory listing for {{ .Path }}</h2>
         </div>
-        
+
         <div class="card" style="margin-bottom: 40px;">
             <div class="card-header">
-                    <form ENCTYPE="multipart/form-data" method="post">
-                        <div class="input-group">
-                            <div class="custom-file">
-                                <input name="file" type="file" class="custom-file-input" id="inputGroupFile" />
-                                <label class="custom-file-label" for="inputGroupFile">Choose file ...</label>
-                            </div>
-                            <div class="input-group-append">
-                                <input class="btn btn-primary" type="submit" value="Upload" />
-                            </div>
+                <form ENCTYPE="multipart/form-data" method="post">
+                    <div class="input-group">
+                        <div class="custom-file">
+                            <input name="file" type="file" class="custom-file-input" id="inputGroupFile" />
+                            <label class="custom-file-label" for="inputGroupFile">Choose file ...</label>
                         </div>
-                    </form>
+                        <div class="input-group-append">
+                            <input class="btn btn-primary" type="submit" value="Upload" />
+                        </div>
+                    </div>
+                </form>
             </div>
             <ul class="list-group list-group-flush">
                 {{range .Items}}
-                <li class="list-group-item"><a href="{{ .URL }}">{{ .Filename }}</a></li>
+                <li class="d-flex flex-row list-group-item">
+                    <div class="p-10">
+                        <a href="{{ .URL }}">{{ .Filename }}</a>
+                    </div>
+                    <div class="ml-auto p-2 file-size">{{ .Size }}</div>
+                </li>
                 {{ end }}
             </ul>
         </div>
         <p class="footer">Powered by <a href="https://github.com/JeziL/gosvr" target="_blank">gosvr</a>.</p>
     </div>
-    
+
     <script src="/js/jquery-3.2.1.slim.min.js"></script>
     <script src="/js/popper.min.js"></script>
     <script src="/js/bootstrap.min.js"></script>
