@@ -12,7 +12,7 @@
 	go get github.com/JeziL/gosvr
 	```
 
-- **Prebuilt binaries**
+- **From binary**
 
 	See [Latest release](https://github.com/JeziL/gosvr/releases/latest). 
 	
