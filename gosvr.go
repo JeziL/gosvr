@@ -108,9 +108,9 @@ func (h simpleHTTPServer) getFiles(filePath string) []aFile {
 	files, err := ioutil.ReadDir(h.absPath(filePath))
 	checkError(err)
 	for _, f := range files {
-		url := path.Join(filePath, f.Name())
+		fileUrl := path.Join(filePath, f.Name())
 		item := aFile{
-			URL:       url,
+			URL:       fileUrl,
 			Filename:  f.Name(),
 			IsDir:     false,
 			IsFile:    true,
