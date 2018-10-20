@@ -18,7 +18,7 @@
 
         <div class="alert alert-warning  alert-dismissible fade show" style="display: none;" role="alert">
             <b>No file selected.</b> Please choose a file first.
-            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <button type="button" class="close" aria-label="Close">
                 <span aria-hidden="true">&times;</span>
             </button>
         </div>
@@ -75,6 +75,9 @@
                 $('div.alert').css("display", "block");
                 return false;
             }
+        });
+        $('button.close').on('click', function() {
+            $('div.alert').css("display", "none");
         });
     </script>
 </body>
