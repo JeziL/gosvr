@@ -183,14 +183,13 @@ func (h simpleHTTPServer) post(w http.ResponseWriter, r *http.Request, t *templa
 	for _, fh := range fhs {
 		f, err := fh.Open()
 		checkError(err)
-		defer f.Close()
-
 		filename := fh.Filename
 		fileNames = append(fileNames, filename)
 		absPath := path.Join(h.absPath(r.URL.String()), filename)
 		fw, err := os.OpenFile(absPath, os.O_WRONLY|os.O_CREATE, 0666)
 		checkError(err)
 		io.Copy(fw, f)
+		f.Close()
 	}
 	resultPage, err := template.New("uploaded").Parse(h.Box.String("templates/uploaded.html"))
 	checkError(err)
