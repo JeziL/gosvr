@@ -17,7 +17,12 @@
             </div>
             <div class="card-body">
                 <h5 class="card-title">Success</h5>
-                <p class="card-text">File '{{ .Filename }}' upload success!</p>
+                <p class="card-text">The following file{{ $length := len .FileNames }}{{ if gt $length 1 }}s were {{ else }} was{{ end }} successfully uploaded!</p>
+                <ul class="list-group list-group-flush">
+                    {{ range  .FileNames }}
+                        <li class="list-group-item">{{ . }}</li>
+                    {{ end }}
+                </ul><br>
                 <a href="{{ .Referer }}" class="btn btn-primary">Back</a>
             </div>
         </div>

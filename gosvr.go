@@ -173,24 +173,35 @@ func (h simpleHTTPServer) get(w http.ResponseWriter, r *http.Request, t *templat
 }
 
 func (h simpleHTTPServer) post(w http.ResponseWriter, r *http.Request, t *template.Template) {
-	file, header, err := r.FormFile("file")
+	err := r.ParseMultipartForm(32 << 20)
 	checkError(err)
-	defer file.Close()
+	if r.MultipartForm.File == nil {
+		checkError(http.ErrMissingFile)
+	}
+	fhs := r.MultipartForm.File["files"]
+	var fileNames []string
+	for _, fh := range fhs {
+		f, err := fh.Open()
+		checkError(err)
+		defer f.Close()
 
-	absPath := path.Join(h.absPath(r.URL.String()), header.Filename)
-	f, err := os.OpenFile(absPath, os.O_WRONLY|os.O_CREATE, 0666)
-	checkError(err)
-	io.Copy(f, file)
+		filename := fh.Filename
+		fileNames = append(fileNames, filename)
+		absPath := path.Join(h.absPath(r.URL.String()), filename)
+		fw, err := os.OpenFile(absPath, os.O_WRONLY|os.O_CREATE, 0666)
+		checkError(err)
+		io.Copy(fw, f)
+	}
 	resultPage, err := template.New("uploaded").Parse(h.Box.String("templates/uploaded.html"))
 	checkError(err)
 	data := struct {
-		Filename string
-		Referer  string
-		Version  string
+		FileNames []string
+		Referer   string
+		Version   string
 	}{
-		Filename: absPath,
-		Referer:  r.Header.Get("Referer"),
-		Version:  _Version,
+		FileNames: fileNames,
+		Referer:   r.Header.Get("Referer"),
+		Version:   _Version,
 	}
 	err = resultPage.Execute(w, data)
 	checkError(err)

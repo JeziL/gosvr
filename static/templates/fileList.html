@@ -28,7 +28,7 @@
                 <form ENCTYPE="multipart/form-data" method="post">
                     <div class="input-group">
                         <div class="custom-file">
-                            <input name="file" type="file" class="custom-file-input" id="inputGroupFile" />
+                            <input name="files" type="file" multiple="multiple" class="custom-file-input" id="inputGroupFile" />
                             <label class="custom-file-label" for="inputGroupFile">Choose file ...</label>
                         </div>
                         <div class="input-group-append">
@@ -38,7 +38,7 @@
                 </form>
             </div>
             <ul class="list-group list-group-flush">
-                {{range .Items}}
+                {{ range .Items }}
                 <li class="d-flex flex-row list-group-item">
                     <div class="p-10">
                         <i class="material-icons">
@@ -67,7 +67,8 @@
     <script src="/gosvrstatic/js/bootstrap.min.js"></script>
     <script>
         $('#inputGroupFile').on('change', function () {
-            var fileName = $(this).val().split('/').pop().split('\\').pop();
+            var fileNames = $(this).prop('files');
+            var fileName = Array.from(fileNames).map(fn => fn.name).join(', ');
             $(this).next('.custom-file-label').html(fileName);
         });
         $('input[type=submit]').on('click', function () {

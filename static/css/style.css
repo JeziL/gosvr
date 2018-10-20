@@ -38,3 +38,7 @@
 button.close:focus {
     outline: none;
 }
+
+.custom-file-label {
+    overflow: hidden;
+}
