@@ -18,7 +18,7 @@ import (
 	"time"
 )
 
-const _Version = "0.9.0"
+const _Version = "0.9.1"
 
 type simpleHTTPServer struct {
 	Root string
