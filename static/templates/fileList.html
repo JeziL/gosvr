@@ -94,12 +94,12 @@
     <script src="/gosvrstatic/js/bootstrap.min.js"></script>
     <script>
         $('#inputGroupFile').on('change', function () {
-            var fileNames = $(this).prop('files');
-            var fileName = Array.from(fileNames).map(fn => fn.name).join(', ');
+            let fileNames = $(this).prop('files');
+            let fileName = Array.from(fileNames).map(fn => fn.name).join(', ');
             $(this).next('.custom-file-label').html(fileName);
         });
         $('input[type=submit]').on('click', function () {
-            if ($('.custom-file-label').html() == "Choose file ...") {
+            if ($('.custom-file-label').html() === "Choose file ...") {
                 $('div.alert').css("display", "block");
                 return false;
             }
@@ -108,12 +108,12 @@
             $('div.alert').css("display", "none");
         });
         $('button.btn-delete').on('click', function () {
-            var fileUrl = decodeURI($($(this).parent().parent().children()[0]).children()[1].getAttribute('href'));
+            let fileUrl = decodeURI($($(this).parent().parent().children()[0]).children()[1].getAttribute('href'));
             $('span#fileDeleting').text(fileUrl);
         });
         $('button#confirmDelete').on('click', function () {
-            var fileUrl = $('span#fileDeleting').text();
-            var fd = new FormData();
+            let fileUrl = $('span#fileDeleting').text();
+            let fd = new FormData();
             fd.append('name', fileUrl);
             $.ajax({
                 type: "DELETE",
