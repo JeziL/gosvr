@@ -25,6 +25,11 @@
 
         <div class="card" style="margin-bottom: 40px;">
             <div class="card-header">
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb bg-transparent">
+                        <li class="breadcrumb-item" id="navHome"><a href="/">Home</a></li>
+                    </ol>
+                </nav>
                 <form ENCTYPE="multipart/form-data" method="post">
                     <div class="input-group">
                         <div class="custom-file">
@@ -93,6 +98,24 @@
     <script src="/gosvrstatic/js/popper.min.js"></script>
     <script src="/gosvrstatic/js/bootstrap.min.js"></script>
     <script>
+        generateNav({{ .Path }});
+
+        function generateNav(path) {
+            let pathComponents = path.split('/');
+            if (!(pathComponents.length === 2 && pathComponents[1] === '')) {
+                let pathAccumulated = '';
+                for (let i = 1; i < pathComponents.length; i++) {
+                    let pc = pathComponents[i];
+                    if (i !== pathComponents.length - 1) {
+                        pathAccumulated += `/${pc}`;
+                        $('ol.breadcrumb').append(`<li class="breadcrumb-item"><a href="${pathAccumulated}">${pc}</a></li>`);
+                    }
+                    else {
+                        $('ol.breadcrumb').append(`<li class="breadcrumb-item active" aria-current="page">${pc}</li>`);
+                    }
+                }
+            }
+        }
         $('#inputGroupFile').on('change', function () {
             let fileNames = $(this).prop('files');
             let fileName = Array.from(fileNames).map(fn => fn.name).join(', ');
