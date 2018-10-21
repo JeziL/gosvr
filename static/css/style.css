@@ -61,4 +61,13 @@ button.btn-delete {
 .breadcrumb {
     margin-bottom: 0;
     padding: 0 0 12px 0;
+    overflow: hidden;
+}
+
+.flex-row {
+    overflow: hidden;
+}
+
+.modal-body {
+    overflow: hidden;
 }
