@@ -41,11 +41,9 @@ type aDir struct {
 
 func (h simpleHTTPServer) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	log.Printf("%s  \"%s %s %s\"", r.RemoteAddr, r.Method, r.URL.String(), r.Proto)
-	t, err := template.New("fileList").Parse(h.Box.String("templates/fileList.html"))
-	checkError(err)
 	switch r.Method {
 	case http.MethodGet:
-		h.get(w, r, t)
+		h.get(w, r)
 	case http.MethodPost:
 		h.post(w, r)
 	case http.MethodDelete:
@@ -91,7 +89,7 @@ func (h simpleHTTPServer) getFiles(filePath string) []aFile {
 	return items
 }
 
-func (h simpleHTTPServer) get(w http.ResponseWriter, r *http.Request, t *template.Template) {
+func (h simpleHTTPServer) get(w http.ResponseWriter, r *http.Request) {
 	filePath := r.URL.String()
 	filePath, err := url.QueryUnescape(filePath)
 	checkError(err)
@@ -111,7 +109,9 @@ func (h simpleHTTPServer) get(w http.ResponseWriter, r *http.Request, t *templat
 			Items:   items,
 			Version: _Version,
 		}
-		err := t.Execute(w, data)
+		t, err := template.New("fileList").Parse(h.Box.String("templates/fileList.html"))
+		checkError(err)
+		err = t.Execute(w, data)
 		checkError(err)
 	} else {
 		fi, err := os.Stat(absPath)
