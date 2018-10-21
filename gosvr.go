@@ -47,7 +47,9 @@ func (h simpleHTTPServer) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	case http.MethodGet:
 		h.get(w, r, t)
 	case http.MethodPost:
-		h.post(w, r, t)
+		h.post(w, r)
+	case http.MethodDelete:
+		h.delete(w, r)
 	default:
 		w.WriteHeader(http.StatusMethodNotAllowed)
 		fmt.Fprint(w, "Unsupported method.")
@@ -127,7 +129,7 @@ func (h simpleHTTPServer) get(w http.ResponseWriter, r *http.Request, t *templat
 	}
 }
 
-func (h simpleHTTPServer) post(w http.ResponseWriter, r *http.Request, t *template.Template) {
+func (h simpleHTTPServer) post(w http.ResponseWriter, r *http.Request) {
 	err := r.ParseMultipartForm(32 << 20)
 	checkError(err)
 	if r.MultipartForm.File == nil {
@@ -159,6 +161,19 @@ func (h simpleHTTPServer) post(w http.ResponseWriter, r *http.Request, t *templa
 	}
 	err = resultPage.Execute(w, data)
 	checkError(err)
+}
+
+func (h simpleHTTPServer) delete(w http.ResponseWriter, r *http.Request) {
+	err := r.ParseMultipartForm(32 << 20)
+	checkError(err)
+	fileUrl := r.FormValue("name")
+	absPath := h.absPath(fileUrl)
+	err = os.RemoveAll(absPath)
+	if err == nil {
+		w.WriteHeader(http.StatusOK)
+	} else {
+		log.Fatal(err)
+	}
 }
 
 func main() {

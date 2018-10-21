@@ -18,9 +18,10 @@
 .file-size {
     padding: 0!important;
     font-size: .9rem;
+    line-height: 25px;
 }
 
-.material-icons {
+.material-icons-file {
     font-size: 22px;
     vertical-align: middle;
     margin-right: 2px;
@@ -41,4 +42,18 @@ button.close:focus {
 
 .custom-file-label {
     overflow: hidden;
+}
+
+div.btn-right {
+    padding: 0!important;
+}
+
+button.btn-delete {
+    padding: 2px 2px;
+    margin-left: 8px;
+    line-height: 0;
+}
+
+.material-icons-delete {
+    font-size: 1rem;
 }
