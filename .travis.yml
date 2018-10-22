@@ -4,9 +4,7 @@ go: "1.11.1"
 notifications:
   email: false
 
-install:
-  - go get -t -v github.com/gobuffalo/packr
-  - cd ${TRAVIS_HOME}/gopath/src/github.com/gobuffalo/packr && go install && cd -
+install: false
 
 script:
   - ./build.sh
