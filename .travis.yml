@@ -6,6 +6,7 @@ notifications:
 
 install:
   - go get -t -v github.com/gobuffalo/packr
+  - cd ${TRAVIS_HOME}/gopath/src/github.com/gobuffalo/packr && go install
 
 script:
   - ./build.sh
