@@ -1,0 +1,16 @@
+language: go
+go: "1.11.1"
+
+env:
+- GO111MODULE=on
+
+notifications:
+  email: false
+
+go_import_path: github.com/gobuffalo/packr
+
+install:
+  - go get github.com/gobuffalo/packr
+
+script:
+  - ./build.sh
