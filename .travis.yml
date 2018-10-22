@@ -1,14 +1,11 @@
 language: go
 go: "1.11.1"
 
-env:
-  - GO111MODULE=on
-
 notifications:
   email: false
 
 install:
-  - go get github.com/gobuffalo/packr
+  - go get -t -v github.com/gobuffalo/packr
 
 script:
   - ./build.sh
