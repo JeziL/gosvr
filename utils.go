@@ -18,7 +18,6 @@ func isDir(filePath string) bool {
 
 func guessType(ext string) string {
 	mimeType := mime.TypeByExtension(ext)
-	//TODO: Delete code detect here.
 	if isCode, _ := isSourceCode(ext); isCode {
 		mimeType = "text/plain; charset=utf-8"
 	}
