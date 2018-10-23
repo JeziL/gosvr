@@ -18,16 +18,9 @@ func isDir(filePath string) bool {
 
 func guessType(ext string) string {
 	mimeType := mime.TypeByExtension(ext)
-	plain := "text/plain; charset=utf-8"
-	if mimeType == "" {
-		var types = map[string]string{
-			".c":  plain,
-			".py": plain,
-			".go": plain,
-		}
-		if val, exists := types[ext]; exists {
-			mimeType = val
-		}
+	//TODO: Delete code detect here.
+	if isCode, _ := isSourceCode(ext); isCode {
+		mimeType = "text/plain; charset=utf-8"
 	}
 	return mimeType
 }
@@ -49,4 +42,15 @@ func checkError(err error) {
 	if err != nil {
 		log.Fatal(err)
 	}
+}
+
+func isSourceCode(ext string) (bool, string) {
+	var langMap = map[string]string{
+		".c":  "c",
+		".py": "python",
+		".go": "golang",
+		".sh": "shell",
+	}
+	val, exists := langMap[ext]
+	return exists, val
 }

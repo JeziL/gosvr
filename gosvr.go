@@ -116,6 +116,7 @@ func (h simpleHTTPServer) get(w http.ResponseWriter, r *http.Request) {
 	} else {
 		fi, err := os.Stat(absPath)
 		checkError(err)
+		//TODO: Code detect here.
 		mimeType := guessType(path.Ext(absPath))
 		contentLength := fi.Size()
 		const rfc2822 = "Mon, 02 Jan 15:04:05 -0700 2006"
