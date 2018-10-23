@@ -25,12 +25,13 @@ type simpleHTTPServer struct {
 }
 
 type aFile struct {
-	URL       string
-	Filename  string
-	Size      string
-	IsDir     bool
-	IsSymlink bool
-	IsFile    bool
+	URL          string
+	Filename     string
+	Size         string
+	IsDir        bool
+	IsSymlink    bool
+	IsFile       bool
+	IsSourceCode bool
 }
 
 type aDir struct {
@@ -65,12 +66,13 @@ func (h simpleHTTPServer) getFiles(filePath string) []aFile {
 	for _, f := range files {
 		fileUrl := path.Join(filePath, f.Name())
 		item := aFile{
-			URL:       fileUrl,
-			Filename:  f.Name(),
-			IsDir:     false,
-			IsFile:    true,
-			IsSymlink: false,
-			Size:      "",
+			URL:          fileUrl,
+			Filename:     f.Name(),
+			IsDir:        false,
+			IsFile:       true,
+			IsSymlink:    false,
+			IsSourceCode: false,
+			Size:         "",
 		}
 		if f.IsDir() {
 			item.Filename += "/"
@@ -81,6 +83,10 @@ func (h simpleHTTPServer) getFiles(filePath string) []aFile {
 				item.Filename += "@"
 				item.IsSymlink = true
 				item.IsFile = false
+			} else if b, lang := isSourceCode(path.Ext(f.Name())); b {
+				item.IsSourceCode = true
+				item.IsFile = false
+				item.URL += fmt.Sprintf("?code=true&lang=%s&view=code", lang)
 			}
 			item.Size = byteToString(f.Size())
 		}
@@ -90,7 +96,7 @@ func (h simpleHTTPServer) getFiles(filePath string) []aFile {
 }
 
 func (h simpleHTTPServer) get(w http.ResponseWriter, r *http.Request) {
-	filePath := r.URL.String()
+	filePath := r.URL.Path
 	filePath, err := url.QueryUnescape(filePath)
 	checkError(err)
 	if strings.HasPrefix(filePath, "/gosvrstatic/") {
