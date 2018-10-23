@@ -2,7 +2,7 @@
 
 *A Golang alternative to SimpleHTTPServer, but more beautiful and powerful.*
 
-![](https://i.loli.net/2018/10/18/5bc8638ff0897.png)
+![](https://i.loli.net/2018/10/23/5bce836ab8722.png)
 
 ## Install
 
