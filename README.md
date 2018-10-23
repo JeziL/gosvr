@@ -1,5 +1,7 @@
 # gosvr
 
+[![Build Status](https://travis-ci.com/JeziL/gosvr.svg?branch=master)](https://travis-ci.com/JeziL/gosvr) [![Go Report Card](https://goreportcard.com/badge/github.com/JeziL/gosvr)](https://goreportcard.com/report/github.com/JeziL/gosvr)
+
 *A Golang alternative to SimpleHTTPServer, but more beautiful and powerful.*
 
 ![](https://i.loli.net/2018/10/23/5bce836ab8722.png)
