@@ -122,6 +122,7 @@ func (h simpleHTTPServer) get(w http.ResponseWriter, r *http.Request) {
 	} else {
 		fi, err := os.Stat(absPath)
 		checkError(err)
+		contentLength := fi.Size()
 		if r.URL.Query().Get("code") == "1" && r.URL.Query().Get("raw") == "0" {
 			f, err := ioutil.ReadFile(absPath)
 			checkError(err)
@@ -129,11 +130,13 @@ func (h simpleHTTPServer) get(w http.ResponseWriter, r *http.Request) {
 				Path        string
 				Lang        string
 				FileContent string
+				FileSize    string
 				Version     string
 			}{
 				Path:        filePath,
 				Lang:        r.URL.Query().Get("lang"),
 				FileContent: string(f),
+				FileSize:    byteToString(contentLength),
 				Version:     _Version,
 			}
 			t, err := template.New("codeView").Parse(h.Box.String("templates/codeView.html"))
@@ -142,7 +145,6 @@ func (h simpleHTTPServer) get(w http.ResponseWriter, r *http.Request) {
 			checkError(err)
 		} else {
 			mimeType := guessType(path.Ext(absPath))
-			contentLength := fi.Size()
 			const rfc2822 = "Mon, 02 Jan 15:04:05 -0700 2006"
 			lastModified := fi.ModTime().Format(rfc2822)
 			w.Header().Set("Content-type", mimeType)

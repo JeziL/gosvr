@@ -14,13 +14,18 @@
 
 <body>
     <div class="container">
-        <div class="page-header">
-            <h2>{{ .Path }}</h2>
-        </div>
+
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb bg-transparent" style="margin-top: 20px;">
+                <li class="breadcrumb-item" id="navHome"><a href="/">Home</a></li>
+            </ol>
+        </nav>
 
         <div class="card" style="margin-bottom: 40px;">
             <div class="card-header">
-                header
+                <div class="file-info">
+                    <span id="lineCount"></span><span class="file-info-divider"></span><span id="fileSize">{{ .FileSize }}</span>
+                </div>
             </div>
             <div class="card-body" style="font-size: 12px;">
                 <pre><code class="{{ .Lang }}">{{ .FileContent }}</code></pre>
@@ -30,9 +35,36 @@
         <p class="footer"><a href="https://github.com/JeziL/gosvr" target="_blank">gosvr</a> - v{{ .Version }}</p>
     </div>
 
+    <script src="/gosvrstatic/js/jquery-3.2.1.min.js"></script>
+    <script src="/gosvrstatic/js/popper.min.js"></script>
+    <script src="/gosvrstatic/js/bootstrap.min.js"></script>
     <script type="application/javascript">
         hljs.initHighlightingOnLoad();
         hljs.initLineNumbersOnLoad();
+
+        generateNav({{ .Path }});
+        generateFileInfo();
+
+        function generateFileInfo() {
+            $('#lineCount').text(`${$('code').text().split(/\r\n|\r|\n/).length} lines`);
+        }
+
+        function generateNav(path) {
+            let pathComponents = path.split('/');
+            if (!(pathComponents.length === 2 && pathComponents[1] === '')) {
+                let pathAccumulated = '';
+                for (let i = 1; i < pathComponents.length; i++) {
+                    let pc = pathComponents[i];
+                    if (i !== pathComponents.length - 1) {
+                        pathAccumulated += `/${pc}`;
+                        $('ol.breadcrumb').append(`<li class="breadcrumb-item"><a href="${pathAccumulated}">${pc}</a></li>`);
+                    }
+                    else {
+                        $('ol.breadcrumb').append(`<li class="breadcrumb-item active" aria-current="page">${pc}</li>`);
+                    }
+                }
+            }
+        }
     </script>
 </body>
 
