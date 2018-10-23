@@ -9,3 +9,17 @@ install:
 
 script:
   - ./build.sh
+
+before_deploy:
+  - cd $TRAVIS_BUILD_DIR
+
+deploy:
+  provider: releases
+  api_key:
+    secure: koZpijHm548rbkSaEDnBvtZ8zmnzDNeIRGBwghP39QxBsd23/NLvbhBA0RAFEumr6XP2NFuDsaKp6RhtryicvkwVpC70WZldla29vxHWa6sKebkzB5WND62hNkXi1VFD0l1OVt2BnfVCg3UxmNuF6mmqMvXuCLyLnSQ1emaQtwUbgWbegyGEyTpBTEBIfpz3mWZC6R10JFkm8JEQwy9nA8bnRxB8zcOVFzPfo5qzgwQycLb7ZqVJ3nyr82rq4tNTLbAj0n9vxbOGGKdCjDdKmq7iYKAiOciRqXA2ijLecfW0wBKjxD14W5ofzhSQ4xsnk0aQHdBPrmHVm5/XWPFjFFaH7/jDnr9WeuQ0ClJpOvq2uf1+zVmRiYxH9dzbTeOelyrCf/vKFIpP4h+Zp7v7OK0/WCfcf9hIXokQOw5s/9U8Hwwo3gGT6un2mzxX/abPlC0H6I323/gc1B5dfgj8Y/XJSHcJrdqgTx6zFl0/BjvDWiu4faUGBKRdYDVDgHRHYwG7FHCHja9LM5dxh2BIg1qi1a6+kK0HceVp5EP7KijBbFWuv4NbsQug1Tw9OQ7N9abQnQMA1tRkr5rrt4/fV6/HW2REL88wwJ4QBxe3htoUr0XQ5003GEbb9AtY/q6Adc+GUAu3b3T0k4dS66HPdyKow2nuic8RRrLOO2TWcxg=
+  file_glob: true
+  file: release/*.tar.gz
+  skip_cleanup: true
+  on:
+    tags: true
+    repo: JeziL/gosvr
