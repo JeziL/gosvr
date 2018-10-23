@@ -4,7 +4,8 @@ go: "1.11.1"
 notifications:
   email: false
 
-install: false
+install:
+  - go get -v github.com/gobuffalo/packr/...
 
 script:
   - ./build.sh
