@@ -129,10 +129,12 @@ func (h simpleHTTPServer) get(w http.ResponseWriter, r *http.Request) {
 				Path        string
 				Lang        string
 				FileContent string
+				Version     string
 			}{
 				Path:        filePath,
 				Lang:        r.URL.Query().Get("lang"),
 				FileContent: string(f),
+				Version:     _Version,
 			}
 			t, err := template.New("codeView").Parse(h.Box.String("templates/codeView.html"))
 			checkError(err)

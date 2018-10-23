@@ -71,3 +71,22 @@ button.btn-delete {
 .modal-body {
     overflow: hidden;
 }
+
+td.hljs-ln-numbers {
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+
+    text-align: center;
+    color: rgba(27,31,35,0.3);
+    vertical-align: top;
+    padding-right: 5px;
+    line-height: 20px;
+}
+
+td.hljs-ln-code {
+    padding-left: 10px;
+}
