@@ -23,9 +23,10 @@
 
         <div class="card" style="margin-bottom: 40px;">
             <div class="card-header">
-                <div class="file-info">
+                <span class="file-info">
                     <span id="lineCount"></span><span class="file-info-divider"></span><span id="fileSize">{{ .FileSize }}</span>
-                </div>
+                </span>
+                <button type="button" class="btn btn-sm btn-outline-dark" id="raw" style="float: right; height: 30px;">Raw</button>
             </div>
             <div class="card-body" style="font-size: 12px;">
                 <pre><code class="{{ .Lang }}">{{ .FileContent }}</code></pre>
@@ -44,6 +45,10 @@
 
         generateNav({{ .Path }});
         generateFileInfo();
+
+        $('button#raw').on('click', function () {
+            window.open({{ .Path }}, "_self");
+        });
 
         function generateFileInfo() {
             $('#lineCount').text(`${$('code').text().split(/\r\n|\r|\n/).length} lines`);
