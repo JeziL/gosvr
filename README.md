@@ -4,7 +4,7 @@
 
 *A Golang alternative to SimpleHTTPServer, but more beautiful and powerful.*
 
-![](https://i.loli.net/2018/10/23/5bce836ab8722.png)
+![](https://i.loli.net/2018/10/23/5bce987bb6210.png)
 
 ## Install
 
@@ -14,12 +14,10 @@
 	go get github.com/JeziL/gosvr
 	```
 
-- **From binary**
+- **From binary (untested)**
 
 	See [Latest release](https://github.com/JeziL/gosvr/releases/latest). 
 	
-	***!!!NOTE:** None of these prebuilt binaries have been tested except for **darwin/amd64**, **linux/amd64** and **windows/amd64**.*
-
 
 ## Usage
 
