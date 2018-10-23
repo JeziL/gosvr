@@ -4,7 +4,13 @@
 
 *A Golang alternative to SimpleHTTPServer, but more beautiful and powerful.*
 
-![](https://i.loli.net/2018/10/23/5bce987bb6210.png)
+<img src="https://i.loli.net/2018/10/23/5bcece86c684b.png" width="500" /> <img src="https://i.loli.net/2018/10/23/5bcece88cc88d.png" width="500" />
+
+## Features
+
+- Good-looking.
+- View, download, upload and delete files.
+- Display source code with syntax highlighting.
 
 ## Install
 
