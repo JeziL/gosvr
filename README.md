@@ -31,6 +31,10 @@ optional arguments:
 
 ## Powered by
 
-- [packr](https://github.com/gobuffalo/packr)
-- [Bootstrap](https://getbootstrap.com/) \[[LICENSE](static/js/LICENSE)\] (along with [JQuery](https://jquery.com/) and [Popper.js](https://popper.js.org/) used by it)
-- [Material Design icons by Google](https://github.com/google/material-design-icons) \[[LICENSE](static/assets/iconfont/LICENSE)\]
+- [packr](https://github.com/gobuffalo/packr) \[[LICENSE](https://github.com/gobuffalo/packr/blob/master/LICENSE.txt)\]
+- [Bootstrap](https://getbootstrap.com/) \[[LICENSE](https://github.com/twbs/bootstrap/blob/v4-dev/LICENSE)\]
+- [JQuery](https://jquery.com/) \[[LICENSE](https://github.com/jquery/jquery/blob/master/LICENSE.txt)\]
+- [Popper.js](https://popper.js.org/) \[[LICENSE](https://github.com/FezVrasta/popper.js/blob/master/LICENSE.md)\]
+- [highlight.js](https://highlightjs.org/) \[[LICENSE](https://github.com/highlightjs/highlight.js/blob/master/LICENSE)\]
+- [highlightjs-line-numbers.js](https://github.com/wcoder/highlightjs-line-numbers.js/) \[[LICENSE](https://github.com/wcoder/highlightjs-line-numbers.js/blob/master/LICENSE)\]
+- [Material Design icons by Google](https://github.com/google/material-design-icons) \[[LICENSE](https://github.com/google/material-design-icons/blob/master/LICENSE)\]
