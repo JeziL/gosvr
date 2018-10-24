@@ -95,6 +95,29 @@ func (h simpleHTTPServer) getFiles(filePath string) []aFile {
 	return items
 }
 
+func (h simpleHTTPServer) serveSourceCode(w http.ResponseWriter, r *http.Request, filePath string, contentLength int64) {
+	absPath := h.absPath(filePath)
+	f, err := ioutil.ReadFile(absPath)
+	checkError(err)
+	data := struct {
+		Path        string
+		Lang        string
+		FileContent string
+		FileSize    string
+		Version     string
+	}{
+		Path:        filePath,
+		Lang:        r.URL.Query().Get("lang"),
+		FileContent: string(f),
+		FileSize:    byteToString(contentLength),
+		Version:     _Version,
+	}
+	t, err := template.New("codeView").Parse(h.Box.String("templates/codeView.html"))
+	checkError(err)
+	err = t.Execute(w, data)
+	checkError(err)
+}
+
 func (h simpleHTTPServer) get(w http.ResponseWriter, r *http.Request) {
 	filePath := r.URL.Path
 	filePath, err := url.QueryUnescape(filePath)
@@ -124,25 +147,7 @@ func (h simpleHTTPServer) get(w http.ResponseWriter, r *http.Request) {
 		checkError(err)
 		contentLength := fi.Size()
 		if r.URL.Query().Get("code") == "1" && r.URL.Query().Get("raw") == "0" {
-			f, err := ioutil.ReadFile(absPath)
-			checkError(err)
-			data := struct {
-				Path        string
-				Lang        string
-				FileContent string
-				FileSize    string
-				Version     string
-			}{
-				Path:        filePath,
-				Lang:        r.URL.Query().Get("lang"),
-				FileContent: string(f),
-				FileSize:    byteToString(contentLength),
-				Version:     _Version,
-			}
-			t, err := template.New("codeView").Parse(h.Box.String("templates/codeView.html"))
-			checkError(err)
-			err = t.Execute(w, data)
-			checkError(err)
+			h.serveSourceCode(w, r, filePath, contentLength)
 		} else {
 			mimeType := guessType(fi.Name())
 			const rfc2822 = "Mon, 02 Jan 15:04:05 -0700 2006"
