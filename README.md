@@ -4,7 +4,7 @@
 
 *A Golang alternative to SimpleHTTPServer, but more beautiful and powerful.*
 
-<img src="https://i.loli.net/2018/10/23/5bcece86c684b.png" width="400" /> <img src="https://i.loli.net/2018/10/23/5bcece88cc88d.png" width="400" />
+<img src="https://i.loli.net/2018/10/23/5bcece86c684b.png" /> <img src="https://i.loli.net/2018/10/23/5bcece88cc88d.png" />
 
 ## Features
 
