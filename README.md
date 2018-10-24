@@ -11,6 +11,7 @@
 - Good-looking.
 - View, download, upload and delete files.
 - Display source code with syntax highlighting.
+- Render markdown files like GitHub does.
 
 ## Install
 
@@ -43,4 +44,6 @@ optional arguments:
 - [Popper.js](https://popper.js.org/) \[[LICENSE](https://github.com/FezVrasta/popper.js/blob/master/LICENSE.md)\]
 - [highlight.js](https://highlightjs.org/) \[[LICENSE](https://github.com/highlightjs/highlight.js/blob/master/LICENSE)\]
 - [highlightjs-line-numbers.js](https://github.com/wcoder/highlightjs-line-numbers.js/) \[[LICENSE](https://github.com/wcoder/highlightjs-line-numbers.js/blob/master/LICENSE)\]
+- [showdown](https://github.com/showdownjs/showdown) \[[LICENSE](https://github.com/showdownjs/showdown/blob/master/LICENSE)\]
+- [github-markdown-css](https://github.com/sindresorhus/github-markdown-css) \[[LICENSE](https://github.com/sindresorhus/github-markdown-css/blob/gh-pages/license)\]
 - [Material Design icons by Google](https://github.com/google/material-design-icons) \[[LICENSE](https://github.com/google/material-design-icons/blob/master/LICENSE)\]
