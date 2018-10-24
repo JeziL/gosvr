@@ -5,10 +5,8 @@
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <link rel="stylesheet" href="/gosvrstatic/css/bootstrap.min.css">
-    <link rel="stylesheet" href="/gosvrstatic/css/li-github-light.css">
-    <script src="/gosvrstatic/js/highlight.pack.js"></script>
-    <script src="/gosvrstatic/js/highlightjs-line-numbers.min.js"></script>
     <link rel="stylesheet" href="/gosvrstatic/css/style.css">
+    <link rel="stylesheet" href="/gosvrstatic/css/github-markdown.css">
     <title>View source: {{ .Path }}</title>
 </head>
 
@@ -26,14 +24,9 @@
                 <span class="file-info">
                     <span id="lineCount"></span><span class="file-info-divider"></span><span id="fileSize">{{ .FileSize }}</span>
                 </span>
-                <span class="codeButtonGroup" style="float: right">
-                    <button type="button" class="btn btn-sm btn-outline-dark" id="preview">Preview</button>
-                    <button type="button" class="btn btn-sm btn-outline-dark" id="raw">Raw</button>
-                </span>
+                <button type="button" class="btn btn-sm btn-outline-dark" id="raw" style="float: right; height: 30px;">Raw</button>
             </div>
-            <div class="card-body" style="font-size: 12px;">
-                <pre><code class="{{ .Lang }}">{{ .FileContent }}</code></pre>
-            </div>
+            <div class="card-body markdown-body"></div>
         </div>
 
         <p class="footer"><a href="https://github.com/JeziL/gosvr" target="_blank">gosvr</a> - v{{ .Version }}</p>
@@ -42,25 +35,26 @@
     <script src="/gosvrstatic/js/jquery-3.2.1.min.js"></script>
     <script src="/gosvrstatic/js/popper.min.js"></script>
     <script src="/gosvrstatic/js/bootstrap.min.js"></script>
+    <script src="/gosvrstatic/js/showdown.min.js"></script>
     <script type="application/javascript">
-        hljs.initHighlightingOnLoad();
-        hljs.initLineNumbersOnLoad();
 
-        var path = {{ .Path }};
+        renderMarkdown({{ .FileContent }});
+        generateNav({{ .Path }});
+        generateFileInfo({{ .FileContent }});
 
-        generateNav(path);
-        generateFileInfo();
+        function renderMarkdown(md) {
+            var converter = new showdown.Converter();
+            converter.setFlavor('github');
+            var html = converter.makeHtml(md);
+            $('.markdown-body').html(html);
+        }
 
         $('button#raw').on('click', function () {
-            window.open(path, "_self");
+            window.open({{ .Path }}, "_self");
         });
 
-        $('button#preview').on('click', function () {
-            window.open(path + "?lang=markdown&preview=1", "_self");
-        });
-
-        function generateFileInfo() {
-            $('#lineCount').text(`${$('code').text().split(/\r\n|\r|\n/).length} lines`);
+        function generateFileInfo(code) {
+            $('#lineCount').text(`${code.split(/\r\n|\r|\n/).length} lines`);
         }
 
         function generateNav(path) {

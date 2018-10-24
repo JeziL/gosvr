@@ -106,3 +106,7 @@ td.hljs-ln-code {
     font-size: 12px;
     color: #24292e;
 }
+
+.codeButtonGroup button {
+    height: 30px;
+}
