@@ -5,6 +5,7 @@ import (
 	"log"
 	"mime"
 	"os"
+	"path"
 )
 
 func isDir(filePath string) bool {
@@ -16,9 +17,10 @@ func isDir(filePath string) bool {
 	return f.Mode().IsDir()
 }
 
-func guessType(ext string) string {
+func guessType(filename string) string {
+	ext := path.Ext(filename)
 	mimeType := mime.TypeByExtension(ext)
-	if isCode, _ := isSourceCode(ext); isCode {
+	if isCode, _ := isSourceCode(filename); isCode {
 		mimeType = "text/plain; charset=utf-8"
 	}
 	return mimeType
@@ -43,8 +45,8 @@ func checkError(err error) {
 	}
 }
 
-func isSourceCode(ext string) (bool, string) {
-	var langMap = map[string]string{
+func isSourceCode(filename string) (bool, string) {
+	var langExtMap = map[string]string{
 		".bf":      "brainfuck",
 		".c":       "cpp",
 		".cc":      "cpp",
@@ -90,6 +92,15 @@ func isSourceCode(ext string) (bool, string) {
 		".xml":     "xml",
 		".yml":     "yaml",
 	}
-	val, exists := langMap[ext]
+	var langNameMap = map[string]string{
+		"makefile": "makefile",
+		"Makefile": "makefile",
+	}
+	ext := path.Ext(filename)
+	name := path.Base(filename)[0 : len(filename)-len(ext)]
+	val, exists := langExtMap[ext]
+	if exists == false {
+		val, exists = langNameMap[name]
+	}
 	return exists, val
 }

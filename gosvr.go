@@ -83,7 +83,7 @@ func (h simpleHTTPServer) getFiles(filePath string) []aFile {
 				item.Filename += "@"
 				item.IsSymlink = true
 				item.IsFile = false
-			} else if b, lang := isSourceCode(path.Ext(f.Name())); b {
+			} else if b, lang := isSourceCode(f.Name()); b {
 				item.IsSourceCode = true
 				item.IsFile = false
 				item.URL += fmt.Sprintf("?code=1&lang=%s&raw=0", lang)
@@ -144,7 +144,7 @@ func (h simpleHTTPServer) get(w http.ResponseWriter, r *http.Request) {
 			err = t.Execute(w, data)
 			checkError(err)
 		} else {
-			mimeType := guessType(path.Ext(absPath))
+			mimeType := guessType(fi.Name())
 			const rfc2822 = "Mon, 02 Jan 15:04:05 -0700 2006"
 			lastModified := fi.ModTime().Format(rfc2822)
 			w.Header().Set("Content-type", mimeType)
