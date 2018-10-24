@@ -9,6 +9,7 @@
     <script src="/gosvrstatic/js/highlight.pack.js"></script>
     <script src="/gosvrstatic/js/highlightjs-line-numbers.min.js"></script>
     <link rel="stylesheet" href="/gosvrstatic/css/style.css">
+    <link rel="stylesheet" href="/gosvrstatic/css/github-markdown.css">
     <title>View source: {{ .Path }}</title>
 </head>
 
@@ -44,25 +45,50 @@
     <script src="/gosvrstatic/js/jquery-3.2.1.min.js"></script>
     <script src="/gosvrstatic/js/popper.min.js"></script>
     <script src="/gosvrstatic/js/bootstrap.min.js"></script>
+    <script src="/gosvrstatic/js/showdown.min.js"></script>
     <script type="application/javascript">
         hljs.initHighlightingOnLoad();
         hljs.initLineNumbersOnLoad();
 
         var path = {{ .Path }};
+        var fileContent = {{ .FileContent }};
 
         generateNav(path);
-        generateFileInfo();
+        generateFileInfo(fileContent);
+
+        function renderMarkdown(md) {
+            var converter = new showdown.Converter();
+            converter.setFlavor('github');
+            var html = converter.makeHtml(md);
+            $('.markdown-body').html(html);
+        }
 
         $('button#raw').on('click', function () {
             window.open(path, "_self");
         });
 
         $('button#preview').on('click', function () {
-            window.open(path + "?code=1&lang=markdown&view=preview", "_self");
+            var cardBody = $('.card-body');
+            if ($(this).hasClass('active')) {
+                cardBody.removeClass('markdown-body');
+                cardBody.css('font-size', '12px');
+                cardBody.html(`<pre><code class="{{ .Lang }}"></code></pre>`);
+                var code = $('code');
+                code.text(fileContent);
+                $(this).removeClass('active');
+                hljs.highlightBlock(code.get(0));
+                hljs.initLineNumbersOnLoad();
+            }
+            else {
+                cardBody.addClass('markdown-body');
+                cardBody.removeAttr('style');
+                renderMarkdown(fileContent);
+                $(this).addClass('active');
+            }
         });
 
-        function generateFileInfo() {
-            $('#lineCount').text(`${$('code').text().split(/\r\n|\r|\n/).length} lines`);
+        function generateFileInfo(code) {
+            $('#lineCount').text(`${code.split(/\r\n|\r|\n/).length} lines`);
         }
 
         function generateNav(path) {

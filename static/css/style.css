@@ -110,3 +110,8 @@ td.hljs-ln-code {
 .codeButtonGroup button {
     height: 30px;
 }
+
+.codeButtonGroup button:focus {
+    outline: none!important;
+    box-shadow: none!important;
+}

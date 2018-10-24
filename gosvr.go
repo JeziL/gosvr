@@ -118,27 +118,6 @@ func (h simpleHTTPServer) serveSourceCode(w http.ResponseWriter, r *http.Request
 	checkError(err)
 }
 
-func (h simpleHTTPServer) serveMarkdown(w http.ResponseWriter, r *http.Request, filePath string, contentLength int64) {
-	absPath := h.absPath(filePath)
-	f, err := ioutil.ReadFile(absPath)
-	checkError(err)
-	data := struct {
-		Path        string
-		FileContent string
-		FileSize    string
-		Version     string
-	}{
-		Path:        filePath,
-		FileContent: string(f),
-		FileSize:    byteToString(contentLength),
-		Version:     _Version,
-	}
-	t, err := template.New("markdownView").Parse(h.Box.String("templates/markdownView.html"))
-	checkError(err)
-	err = t.Execute(w, data)
-	checkError(err)
-}
-
 func (h simpleHTTPServer) get(w http.ResponseWriter, r *http.Request) {
 	filePath := r.URL.Path
 	filePath, err := url.QueryUnescape(filePath)
@@ -169,8 +148,6 @@ func (h simpleHTTPServer) get(w http.ResponseWriter, r *http.Request) {
 		contentLength := fi.Size()
 		if r.URL.Query().Get("code") == "1" && r.URL.Query().Get("view") == "code" {
 			h.serveSourceCode(w, r, filePath, contentLength)
-		} else if r.URL.Query().Get("lang") == "markdown" && r.URL.Query().Get("view") == "preview" {
-			h.serveMarkdown(w, r, filePath, contentLength)
 		} else {
 			mimeType := guessType(fi.Name())
 			const rfc2822 = "Mon, 02 Jan 15:04:05 -0700 2006"
