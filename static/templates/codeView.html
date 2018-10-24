@@ -27,7 +27,9 @@
                     <span id="lineCount"></span><span class="file-info-divider"></span><span id="fileSize">{{ .FileSize }}</span>
                 </span>
                 <span class="codeButtonGroup" style="float: right">
-                    <button type="button" class="btn btn-sm btn-outline-dark" id="preview">Preview</button>
+                    {{ if eq .Lang "markdown" }}
+                        <button type="button" class="btn btn-sm btn-outline-dark" id="preview">Preview</button>
+                    {{ end }}
                     <button type="button" class="btn btn-sm btn-outline-dark" id="raw">Raw</button>
                 </span>
             </div>
