@@ -86,7 +86,7 @@ func (h simpleHTTPServer) getFiles(filePath string) []aFile {
 			} else if b, lang := isSourceCode(f.Name()); b {
 				item.IsSourceCode = true
 				item.IsFile = false
-				item.URL += fmt.Sprintf("?code=1&lang=%s&raw=0", lang)
+				item.URL += fmt.Sprintf("?code=1&lang=%s&view=code", lang)
 			}
 			item.Size = byteToString(f.Size())
 		}
@@ -167,9 +167,9 @@ func (h simpleHTTPServer) get(w http.ResponseWriter, r *http.Request) {
 		fi, err := os.Stat(absPath)
 		checkError(err)
 		contentLength := fi.Size()
-		if r.URL.Query().Get("code") == "1" && r.URL.Query().Get("raw") == "0" {
+		if r.URL.Query().Get("code") == "1" && r.URL.Query().Get("view") == "code" {
 			h.serveSourceCode(w, r, filePath, contentLength)
-		} else if r.URL.Query().Get("lang") == "markdown" && r.URL.Query().Get("preview") == "1" {
+		} else if r.URL.Query().Get("lang") == "markdown" && r.URL.Query().Get("view") == "preview" {
 			h.serveMarkdown(w, r, filePath, contentLength)
 		} else {
 			mimeType := guessType(fi.Name())
