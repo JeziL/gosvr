@@ -122,7 +122,7 @@ func (h simpleHTTPServer) get(w http.ResponseWriter, r *http.Request) {
 	filePath := r.URL.Path
 	filePath, err := url.QueryUnescape(filePath)
 	checkError(err)
-	if strings.HasPrefix(filePath, "/gosvrstatic/") {
+	if strings.HasPrefix(filePath, "/gosvrstatic/") && r.URL.Query().Get("internal") == "1" {
 		http.StripPrefix("/gosvrstatic/", http.FileServer(h.Box)).ServeHTTP(w, r)
 		return
 	}
