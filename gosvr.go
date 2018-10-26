@@ -45,9 +45,9 @@ func (h simpleHTTPServer) ServeHTTP(w loggingResponseWriter, r *http.Request) {
 	case http.MethodGet:
 		h.get(&w, r)
 	case http.MethodPost:
-		h.post(w.Writer, r)
+		h.post(&w, r)
 	case http.MethodDelete:
-		h.delete(w.Writer, r)
+		h.delete(&w, r)
 	default:
 		w.WriteHeader(http.StatusMethodNotAllowed)
 		fmt.Fprint(w.Writer, "Unsupported method.")
@@ -165,7 +165,7 @@ func (h simpleHTTPServer) get(w *loggingResponseWriter, r *http.Request) {
 	}
 }
 
-func (h simpleHTTPServer) post(w http.ResponseWriter, r *http.Request) {
+func (h simpleHTTPServer) post(w *loggingResponseWriter, r *http.Request) {
 	err := r.ParseMultipartForm(32 << 20)
 	checkError(err)
 	if r.MultipartForm.File == nil {
@@ -195,11 +195,12 @@ func (h simpleHTTPServer) post(w http.ResponseWriter, r *http.Request) {
 		Referer:   r.Header.Get("Referer"),
 		Version:   _Version,
 	}
-	err = resultPage.Execute(w, data)
+	w.WriteHeader(http.StatusOK)
+	err = resultPage.Execute(w.Writer, data)
 	checkError(err)
 }
 
-func (h simpleHTTPServer) delete(w http.ResponseWriter, r *http.Request) {
+func (h simpleHTTPServer) delete(w *loggingResponseWriter, r *http.Request) {
 	err := r.ParseMultipartForm(32 << 20)
 	checkError(err)
 	fileUrl := r.FormValue("name")
