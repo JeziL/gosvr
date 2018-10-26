@@ -50,7 +50,6 @@ func (h simpleHTTPServer) ServeHTTP(w loggingResponseWriter, r *http.Request) {
 		h.delete(&w, r)
 	default:
 		w.WriteHeader(http.StatusMethodNotAllowed)
-		fmt.Fprint(w.Writer, "Unsupported method.")
 	}
 	log.Printf("%s  \"%s %s %s\" %d", r.RemoteAddr, r.Method, r.URL.String(), r.Proto, w.StatusCode)
 }
@@ -144,7 +143,6 @@ func (h simpleHTTPServer) get(w *loggingResponseWriter, r *http.Request) {
 		w.WriteHeader(http.StatusOK)
 		err = t.Execute(w.Writer, data)
 		checkError(err)
-		return
 	} else {
 		fi, err := os.Stat(absPath)
 		checkError(err)
