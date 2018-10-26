@@ -51,7 +51,7 @@ func (h simpleHTTPServer) ServeHTTP(w loggingResponseWriter, r *http.Request) {
 	default:
 		w.WriteHeader(http.StatusMethodNotAllowed)
 	}
-	log.Printf("%s  \"%s %s %s\" %d", r.RemoteAddr, r.Method, r.URL.String(), r.Proto, w.StatusCode)
+	log.Printf("%s - - \"%s %s %s\" %d - ", r.RemoteAddr, r.Method, r.URL.String(), r.Proto, w.StatusCode)
 }
 
 func (h simpleHTTPServer) absPath(filePath string) string {
