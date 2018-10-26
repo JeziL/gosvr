@@ -2,214 +2,14 @@ package main
 
 import (
 	"flag"
-	"fmt"
+	"github.com/JeziL/gosvr/server"
 	"github.com/gobuffalo/packr"
-	"html/template"
-	"io"
-	"io/ioutil"
 	"log"
 	"net/http"
-	"net/url"
-	"os"
-	"path"
-	"strconv"
-	"strings"
 	"time"
 )
 
 const _Version = "0.9.4"
-
-type simpleHTTPServer struct {
-	Root string
-	Box  packr.Box
-}
-
-type aFile struct {
-	URL          string
-	Filename     string
-	Size         string
-	IsDir        bool
-	IsSymlink    bool
-	IsFile       bool
-	IsSourceCode bool
-}
-
-type aDir struct {
-	Path    string
-	Items   []aFile
-	Version string
-}
-
-func (h simpleHTTPServer) ServeHTTP(w loggingResponseWriter, r *http.Request) {
-	switch r.Method {
-	case http.MethodGet:
-		h.get(&w, r)
-	case http.MethodPost:
-		h.post(&w, r)
-	case http.MethodDelete:
-		h.delete(&w, r)
-	default:
-		w.WriteHeader(http.StatusMethodNotAllowed)
-	}
-	log.Printf("%s - - \"%s %s %s\" %d - ", r.RemoteAddr, r.Method, r.URL.String(), r.Proto, w.StatusCode)
-}
-
-func (h simpleHTTPServer) absPath(filePath string) string {
-	return path.Join(h.Root, filePath)
-}
-
-func (h simpleHTTPServer) getFiles(filePath string) []aFile {
-	var items []aFile
-	files, err := ioutil.ReadDir(h.absPath(filePath))
-	checkError(err)
-	for _, f := range files {
-		fileUrl := path.Join(filePath, f.Name())
-		item := aFile{
-			URL:          fileUrl,
-			Filename:     f.Name(),
-			IsDir:        false,
-			IsFile:       true,
-			IsSymlink:    false,
-			IsSourceCode: false,
-			Size:         "",
-		}
-		if f.IsDir() {
-			item.Filename += "/"
-			item.IsDir = true
-			item.IsFile = false
-		} else {
-			if f.Mode()&os.ModeSymlink != 0 {
-				item.Filename += "@"
-				item.IsSymlink = true
-				item.IsFile = false
-			} else if b, lang := isSourceCode(f.Name()); b {
-				item.IsSourceCode = true
-				item.IsFile = false
-				item.URL += fmt.Sprintf("?code=1&lang=%s&view=code", lang)
-			}
-			item.Size = byteToString(f.Size())
-		}
-		items = append(items, item)
-	}
-	return items
-}
-
-func (h simpleHTTPServer) serveSourceCode(w *loggingResponseWriter, r *http.Request, filePath string, contentLength int64) {
-	absPath := h.absPath(filePath)
-	f, err := ioutil.ReadFile(absPath)
-	checkError(err)
-	data := struct {
-		Path        string
-		Lang        string
-		FileContent string
-		FileSize    string
-		Version     string
-	}{
-		Path:        filePath,
-		Lang:        r.URL.Query().Get("lang"),
-		FileContent: string(f),
-		FileSize:    byteToString(contentLength),
-		Version:     _Version,
-	}
-	t, err := template.New("codeView").Parse(h.Box.String("templates/codeView.html"))
-	checkError(err)
-	w.WriteHeader(http.StatusOK)
-	err = t.Execute(w.Writer, data)
-	checkError(err)
-}
-
-func (h simpleHTTPServer) get(w *loggingResponseWriter, r *http.Request) {
-	filePath := r.URL.Path
-	filePath, err := url.QueryUnescape(filePath)
-	checkError(err)
-	if strings.HasPrefix(filePath, "/gosvrstatic/") && r.URL.Query().Get("internal") == "1" {
-		http.StripPrefix("/gosvrstatic/", http.FileServer(h.Box)).ServeHTTP(w, r)
-		return
-	}
-	absPath := h.absPath(filePath)
-	if _, err := os.Stat(absPath); os.IsNotExist(err) {
-		w.WriteHeader(404)
-		return
-	}
-	if isDir(absPath) {
-		items := h.getFiles(filePath)
-		data := aDir{
-			Path:    filePath,
-			Items:   items,
-			Version: _Version,
-		}
-		t, err := template.New("fileList").Parse(h.Box.String("templates/fileList.html"))
-		checkError(err)
-		w.WriteHeader(http.StatusOK)
-		err = t.Execute(w.Writer, data)
-		checkError(err)
-	} else {
-		fi, err := os.Stat(absPath)
-		checkError(err)
-		contentLength := fi.Size()
-		if r.URL.Query().Get("code") == "1" && r.URL.Query().Get("view") == "code" {
-			h.serveSourceCode(w, r, filePath, contentLength)
-		} else {
-			mimeType := guessType(fi.Name())
-			const rfc2822 = "Mon, 02 Jan 15:04:05 -0700 2006"
-			lastModified := fi.ModTime().Format(rfc2822)
-			w.Header().Set("Content-type", mimeType)
-			w.Header().Set("Content-Length", strconv.FormatInt(contentLength, 10))
-			w.Header().Set("Last-Modified", lastModified)
-			f, err := ioutil.ReadFile(absPath)
-			checkError(err)
-			w.Write(f)
-		}
-	}
-}
-
-func (h simpleHTTPServer) post(w *loggingResponseWriter, r *http.Request) {
-	err := r.ParseMultipartForm(32 << 20)
-	checkError(err)
-	if r.MultipartForm.File == nil {
-		checkError(http.ErrMissingFile)
-	}
-	fhs := r.MultipartForm.File["files"]
-	var fileNames []string
-	for _, fh := range fhs {
-		f, err := fh.Open()
-		checkError(err)
-		filename := fh.Filename
-		fileNames = append(fileNames, filename)
-		absPath := path.Join(h.absPath(r.URL.String()), filename)
-		fw, err := os.OpenFile(absPath, os.O_WRONLY|os.O_CREATE, 0666)
-		checkError(err)
-		io.Copy(fw, f)
-		f.Close()
-	}
-	resultPage, err := template.New("uploaded").Parse(h.Box.String("templates/uploaded.html"))
-	checkError(err)
-	data := struct {
-		FileNames []string
-		Referer   string
-		Version   string
-	}{
-		FileNames: fileNames,
-		Referer:   r.Header.Get("Referer"),
-		Version:   _Version,
-	}
-	w.WriteHeader(http.StatusOK)
-	err = resultPage.Execute(w.Writer, data)
-	checkError(err)
-}
-
-func (h simpleHTTPServer) delete(w *loggingResponseWriter, r *http.Request) {
-	err := r.ParseMultipartForm(32 << 20)
-	checkError(err)
-	fileUrl := r.FormValue("name")
-	absPath := h.absPath(fileUrl)
-	err = os.RemoveAll(absPath)
-	if err == nil {
-		w.WriteHeader(http.StatusOK)
-	} else {
-		log.Fatal(err)
-	}
-}
 
 func main() {
 	var dir = flag.String("d", ".", "Root directory to serve files from.")
@@ -219,7 +19,7 @@ func main() {
 	box := packr.NewBox("./static")
 	server := &http.Server{
 		Addr:           ":" + *port,
-		Handler:        httpHandlerWrapper(simpleHTTPServer{Root: *dir, Box: box}),
+		Handler:        gosvr.HTTPHandlerWrapper(gosvr.SimpleHTTPServer{Root: *dir, Box: box, Version: _Version}),
 		ReadTimeout:    10 * time.Second,
 		WriteTimeout:   10 * time.Second,
 		MaxHeaderBytes: 1 << 20,

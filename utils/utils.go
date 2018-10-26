@@ -1,4 +1,4 @@
-package main
+package utils
 
 import (
 	"fmt"
@@ -8,25 +8,25 @@ import (
 	"path"
 )
 
-func isDir(filePath string) bool {
+func IsDir(filePath string) bool {
 	f, err := os.Stat(filePath)
-	checkError(err)
+	CheckError(err)
 	if err != nil {
 		return false
 	}
 	return f.Mode().IsDir()
 }
 
-func guessType(filename string) string {
+func GuessType(filename string) string {
 	ext := path.Ext(filename)
 	mimeType := mime.TypeByExtension(ext)
-	if isCode, _ := isSourceCode(filename); isCode {
+	if isCode, _ := IsSourceCode(filename); isCode {
 		mimeType = "text/plain; charset=utf-8"
 	}
 	return mimeType
 }
 
-func byteToString(b int64) string {
+func ByteToString(b int64) string {
 	const unit = 1000
 	if b < unit {
 		return fmt.Sprintf("%d B", b)
@@ -39,13 +39,13 @@ func byteToString(b int64) string {
 	return fmt.Sprintf("%.1f %cB", float64(b)/float64(div), "KMGTPE"[exp])
 }
 
-func checkError(err error) {
+func CheckError(err error) {
 	if err != nil {
 		log.Fatal(err)
 	}
 }
 
-func isSourceCode(filename string) (bool, string) {
+func IsSourceCode(filename string) (bool, string) {
 	var langExtMap = map[string]string{
 		".bf":      "brainfuck",
 		".c":       "cpp",

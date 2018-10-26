@@ -1,4 +1,4 @@
-package main
+package gosvr
 
 import "net/http"
 
@@ -26,7 +26,7 @@ func (w *loggingResponseWriter) WriteHeader(code int) {
 	w.Writer.WriteHeader(code)
 }
 
-func httpHandlerWrapper(h simpleHTTPServer) http.HandlerFunc {
+func HTTPHandlerWrapper(h SimpleHTTPServer) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		lrw := loggingResponseWriter{
 			Writer:  w,
