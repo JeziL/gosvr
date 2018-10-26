@@ -8,6 +8,7 @@ import (
 	"path"
 )
 
+// IsDir determines if a path is a directory.
 func IsDir(filePath string) bool {
 	f, err := os.Stat(filePath)
 	CheckError(err)
@@ -17,6 +18,7 @@ func IsDir(filePath string) bool {
 	return f.Mode().IsDir()
 }
 
+// GuessType guesses the MIME type of a given file.
 func GuessType(filename string) string {
 	ext := path.Ext(filename)
 	mimeType := mime.TypeByExtension(ext)
@@ -26,6 +28,7 @@ func GuessType(filename string) string {
 	return mimeType
 }
 
+// ByteToString converts file sizes (in integer) to readable strings.
 func ByteToString(b int64) string {
 	const unit = 1000
 	if b < unit {
@@ -39,12 +42,14 @@ func ByteToString(b int64) string {
 	return fmt.Sprintf("%.1f %cB", float64(b)/float64(div), "KMGTPE"[exp])
 }
 
+// CheckError is a rough error-handling method.
 func CheckError(err error) {
 	if err != nil {
 		log.Fatal(err)
 	}
 }
 
+// IsSourceCode determines if a file is a source code file based on its extension (and filename).
 func IsSourceCode(filename string) (bool, string) {
 	var langExtMap = map[string]string{
 		".bf":      "brainfuck",

@@ -17,6 +17,7 @@ import (
 	"github.com/JeziL/gosvr/utils"
 )
 
+// SimpleHTTPServer handles all HTTP requests.
 type SimpleHTTPServer struct {
 	Root    string
 	Box     packr.Box
@@ -62,9 +63,9 @@ func (h SimpleHTTPServer) getFiles(filePath string) []aFile {
 	files, err := ioutil.ReadDir(h.absPath(filePath))
 	utils.CheckError(err)
 	for _, f := range files {
-		fileUrl := path.Join(filePath, f.Name())
+		fileURL := path.Join(filePath, f.Name())
 		item := aFile{
-			URL:          fileUrl,
+			URL:          fileURL,
 			Filename:     f.Name(),
 			IsDir:        false,
 			IsFile:       true,
@@ -200,8 +201,8 @@ func (h SimpleHTTPServer) post(w *loggingResponseWriter, r *http.Request) {
 func (h SimpleHTTPServer) delete(w *loggingResponseWriter, r *http.Request) {
 	err := r.ParseMultipartForm(32 << 20)
 	utils.CheckError(err)
-	fileUrl := r.FormValue("name")
-	absPath := h.absPath(fileUrl)
+	fileURL := r.FormValue("name")
+	absPath := h.absPath(fileURL)
 	err = os.RemoveAll(absPath)
 	if err == nil {
 		w.WriteHeader(http.StatusOK)

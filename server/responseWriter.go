@@ -26,6 +26,7 @@ func (w *loggingResponseWriter) WriteHeader(code int) {
 	w.Writer.WriteHeader(code)
 }
 
+// HTTPHandlerWrapper wraps a handler that uses loggingResponseWriter.
 func HTTPHandlerWrapper(h SimpleHTTPServer) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		lrw := loggingResponseWriter{
