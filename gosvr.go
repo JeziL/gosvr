@@ -2,11 +2,12 @@ package main
 
 import (
 	"flag"
-	"github.com/JeziL/gosvr/server"
 	"github.com/gobuffalo/packr"
 	"log"
 	"net/http"
 	"time"
+
+	"github.com/JeziL/gosvr/server"
 )
 
 const _Version = "0.9.4"

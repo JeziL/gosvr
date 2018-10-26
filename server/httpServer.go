@@ -2,7 +2,6 @@ package gosvr
 
 import (
 	"fmt"
-	"github.com/JeziL/gosvr/utils"
 	"github.com/gobuffalo/packr"
 	"html/template"
 	"io"
@@ -14,6 +13,8 @@ import (
 	"path"
 	"strconv"
 	"strings"
+
+	"github.com/JeziL/gosvr/utils"
 )
 
 type SimpleHTTPServer struct {
