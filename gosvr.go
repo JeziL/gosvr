@@ -40,19 +40,19 @@ type aDir struct {
 	Version string
 }
 
-func (h simpleHTTPServer) ServeHTTP(w http.ResponseWriter, r *http.Request) {
-	log.Printf("%s  \"%s %s %s\"", r.RemoteAddr, r.Method, r.URL.String(), r.Proto)
+func (h simpleHTTPServer) ServeHTTP(w loggingResponseWriter, r *http.Request) {
 	switch r.Method {
 	case http.MethodGet:
-		h.get(w, r)
+		h.get(&w, r)
 	case http.MethodPost:
-		h.post(w, r)
+		h.post(w.Writer, r)
 	case http.MethodDelete:
-		h.delete(w, r)
+		h.delete(w.Writer, r)
 	default:
 		w.WriteHeader(http.StatusMethodNotAllowed)
-		fmt.Fprint(w, "Unsupported method.")
+		fmt.Fprint(w.Writer, "Unsupported method.")
 	}
+	log.Printf("%s  \"%s %s %s\" %d", r.RemoteAddr, r.Method, r.URL.String(), r.Proto, w.StatusCode)
 }
 
 func (h simpleHTTPServer) absPath(filePath string) string {
@@ -95,7 +95,7 @@ func (h simpleHTTPServer) getFiles(filePath string) []aFile {
 	return items
 }
 
-func (h simpleHTTPServer) serveSourceCode(w http.ResponseWriter, r *http.Request, filePath string, contentLength int64) {
+func (h simpleHTTPServer) serveSourceCode(w *loggingResponseWriter, r *http.Request, filePath string, contentLength int64) {
 	absPath := h.absPath(filePath)
 	f, err := ioutil.ReadFile(absPath)
 	checkError(err)
@@ -114,11 +114,12 @@ func (h simpleHTTPServer) serveSourceCode(w http.ResponseWriter, r *http.Request
 	}
 	t, err := template.New("codeView").Parse(h.Box.String("templates/codeView.html"))
 	checkError(err)
-	err = t.Execute(w, data)
+	w.WriteHeader(http.StatusOK)
+	err = t.Execute(w.Writer, data)
 	checkError(err)
 }
 
-func (h simpleHTTPServer) get(w http.ResponseWriter, r *http.Request) {
+func (h simpleHTTPServer) get(w *loggingResponseWriter, r *http.Request) {
 	filePath := r.URL.Path
 	filePath, err := url.QueryUnescape(filePath)
 	checkError(err)
@@ -140,8 +141,10 @@ func (h simpleHTTPServer) get(w http.ResponseWriter, r *http.Request) {
 		}
 		t, err := template.New("fileList").Parse(h.Box.String("templates/fileList.html"))
 		checkError(err)
-		err = t.Execute(w, data)
+		w.WriteHeader(http.StatusOK)
+		err = t.Execute(w.Writer, data)
 		checkError(err)
+		return
 	} else {
 		fi, err := os.Stat(absPath)
 		checkError(err)
@@ -217,7 +220,7 @@ func main() {
 	box := packr.NewBox("./static")
 	server := &http.Server{
 		Addr:           ":" + *port,
-		Handler:        &simpleHTTPServer{Root: *dir, Box: box},
+		Handler:        httpHandlerWrapper(simpleHTTPServer{Root: *dir, Box: box}),
 		ReadTimeout:    10 * time.Second,
 		WriteTimeout:   10 * time.Second,
 		MaxHeaderBytes: 1 << 20,
