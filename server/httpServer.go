@@ -48,6 +48,8 @@ func (h SimpleHTTPServer) ServeHTTP(w loggingResponseWriter, r *http.Request) {
 		h.post(&w, r)
 	case http.MethodDelete:
 		h.delete(&w, r)
+	case http.MethodPatch:
+		h.patch(&w, r)
 	default:
 		w.WriteHeader(http.StatusMethodNotAllowed)
 	}
@@ -204,6 +206,20 @@ func (h SimpleHTTPServer) delete(w *loggingResponseWriter, r *http.Request) {
 	fileURL := r.FormValue("name")
 	absPath := h.absPath(fileURL)
 	err = os.RemoveAll(absPath)
+	if err == nil {
+		w.WriteHeader(http.StatusOK)
+	} else {
+		log.Fatal(err)
+	}
+}
+
+func (h SimpleHTTPServer) patch(w *loggingResponseWriter, r *http.Request) {
+	err := r.ParseMultipartForm(32 << 20)
+	utils.CheckError(err)
+	fileURL := r.FormValue("name")
+	absPath := h.absPath(fileURL)
+	newName := r.FormValue("new_name")
+	err = os.Rename(absPath, path.Join(path.Dir(absPath), newName))
 	if err == nil {
 		w.WriteHeader(http.StatusOK)
 	} else {

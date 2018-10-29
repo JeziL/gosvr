@@ -181,12 +181,32 @@
             });
         });
         $('button.btn-rename').on('click', function () {
-            let fileUrl = decodeURI($($(this).parent().parent().children()[0]).children()[1].getAttribute('href')).split('?')[0];
-            let filename = decodeURI($($(this).parent().parent().children()[0]).children()[1].text).split('?')[0];
+            let fileListObj = $($(this).parent().parent().children()[0]).children()[1];
+            let fileUrl = decodeURI(fileListObj.getAttribute('href')).split('?')[0];
+            let filename = decodeURI(fileListObj.text).split('?')[0];
             if (filename.endsWith('/') || filename.endsWith('@')) {
                 filename = filename.slice(0, -1);
             }
-            $('input#newFileName').val(filename);
+            let inputLabel = $('input#newFileName');
+            inputLabel.val(filename);
+            inputLabel.attr('fileUrl', fileUrl);
+        });
+        $('button#confirmRename').on('click', function () {
+            let inputLabel = $('input#newFileName');
+            let fileUrl = inputLabel.attr('fileUrl');
+            let fd = new FormData();
+            fd.append('name', fileUrl);
+            fd.append('new_name', inputLabel.val());
+            $.ajax({
+                type: "PATCH",
+                url: "rename",
+                data: fd,
+                contentType: false,
+                processData: false,
+                success: function (msg) {
+                    location.reload();
+                }
+            });
         });
     </script>
 </body>
