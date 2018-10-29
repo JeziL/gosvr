@@ -128,7 +128,7 @@ func (h SimpleHTTPServer) get(w *loggingResponseWriter, r *http.Request) {
 	}
 	absPath := h.absPath(filePath)
 	if _, err := os.Stat(absPath); os.IsNotExist(err) {
-		w.WriteHeader(404)
+		w.WriteHeader(http.StatusNotFound)
 		return
 	}
 	if utils.IsDir(absPath) {
