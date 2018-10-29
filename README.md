@@ -1,6 +1,7 @@
 # gosvr
 
 [![Build Status](https://travis-ci.com/JeziL/gosvr.svg?branch=master)](https://travis-ci.com/JeziL/gosvr) [![Go Report Card](https://goreportcard.com/badge/github.com/JeziL/gosvr)](https://goreportcard.com/report/github.com/JeziL/gosvr)
+[![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2FJeziL%2Fgosvr.svg?type=shield)](https://app.fossa.io/projects/git%2Bgithub.com%2FJeziL%2Fgosvr?ref=badge_shield)
 
 *A Golang alternative to SimpleHTTPServer, but more beautiful and powerful.*
 
@@ -47,3 +48,7 @@ optional arguments:
 - [showdown](https://github.com/showdownjs/showdown) \[[LICENSE](https://github.com/showdownjs/showdown/blob/master/LICENSE)\]
 - [github-markdown-css](https://github.com/sindresorhus/github-markdown-css) \[[LICENSE](https://github.com/sindresorhus/github-markdown-css/blob/gh-pages/license)\]
 - [Material Design icons by Google](https://github.com/google/material-design-icons) \[[LICENSE](https://github.com/google/material-design-icons/blob/master/LICENSE)\]
+
+
+## License
+[![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2FJeziL%2Fgosvr.svg?type=large)](https://app.fossa.io/projects/git%2Bgithub.com%2FJeziL%2Fgosvr?ref=badge_large)
