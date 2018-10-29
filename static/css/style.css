@@ -48,13 +48,13 @@ div.btn-right {
     padding: 0!important;
 }
 
-button.btn-delete {
+button.btn-right {
     padding: 2px 2px;
     margin-left: 8px;
     line-height: 0;
 }
 
-.material-icons-delete {
+.material-icons-right {
     font-size: 1rem;
 }
 
