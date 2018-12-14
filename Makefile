@@ -16,5 +16,6 @@ clean: ds
 
 cleanstatic: ds
 	rm -rf packrd
+	rm -f *packr.go
 
 cleanall: clean cleanstatic
