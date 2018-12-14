@@ -160,7 +160,8 @@ func (h SimpleHTTPServer) get(w *loggingResponseWriter, r *http.Request) {
 			w.Header().Set("Last-Modified", lastModified)
 			f, err := ioutil.ReadFile(absPath)
 			utils.CheckError(err)
-			w.Write(f)
+			_, err = w.Write(f)
+			utils.CheckError(err)
 		}
 	}
 }
@@ -181,8 +182,10 @@ func (h SimpleHTTPServer) post(w *loggingResponseWriter, r *http.Request) {
 		absPath := path.Join(h.absPath(r.URL.String()), filename)
 		fw, err := os.OpenFile(absPath, os.O_WRONLY|os.O_CREATE, 0666)
 		utils.CheckError(err)
-		io.Copy(fw, f)
-		f.Close()
+		_, err = io.Copy(fw, f)
+		utils.CheckError(err)
+		err = f.Close()
+		utils.CheckError(err)
 	}
 	resultPage, err := template.New("uploaded").Parse(h.Box.String("templates/uploaded.html"))
 	utils.CheckError(err)
