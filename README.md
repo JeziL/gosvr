@@ -9,7 +9,7 @@
 ## Features
 
 - Good-looking.
-- View, download, upload and delete files.
+- View, download, upload, rename and delete files.
 - Display source code with syntax highlighting.
 - Render markdown files like GitHub does.
 
