@@ -2,7 +2,7 @@ package main
 
 import (
 	"flag"
-	"github.com/gobuffalo/packr"
+	"github.com/gobuffalo/packr/v2"
 	"log"
 	"net/http"
 	"time"
@@ -17,7 +17,7 @@ func main() {
 	var port = flag.String("p", "8080", "Port number of the HTTP service.")
 	flag.Parse()
 
-	box := packr.NewBox("./static")
+	box := packr.New("gosvr", "./static")
 	server := &http.Server{
 		Addr:           ":" + *port,
 		Handler:        gosvr.HTTPHandlerWrapper(gosvr.SimpleHTTPServer{Root: *dir, Box: box, Version: _Version}),

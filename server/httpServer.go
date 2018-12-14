@@ -2,7 +2,7 @@ package gosvr
 
 import (
 	"fmt"
-	"github.com/gobuffalo/packr"
+	"github.com/gobuffalo/packr/v2"
 	"html/template"
 	"io"
 	"io/ioutil"
@@ -20,7 +20,7 @@ import (
 // SimpleHTTPServer handles all HTTP requests.
 type SimpleHTTPServer struct {
 	Root    string
-	Box     packr.Box
+	Box     *packr.Box
 	Version string
 }
 
