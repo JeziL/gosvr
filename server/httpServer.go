@@ -113,7 +113,9 @@ func (h SimpleHTTPServer) serveSourceCode(w *loggingResponseWriter, r *http.Requ
 		FileSize:    utils.ByteToString(contentLength),
 		Version:     h.Version,
 	}
-	t, err := template.New("codeView").Parse(h.Box.String("templates/codeView.html"))
+	tpl, err := h.Box.FindString("templates/codeView.html")
+	utils.CheckError(err)
+	t, err := template.New("codeView").Parse(tpl)
 	utils.CheckError(err)
 	w.WriteHeader(http.StatusOK)
 	err = t.Execute(w.Writer, data)
@@ -140,7 +142,9 @@ func (h SimpleHTTPServer) get(w *loggingResponseWriter, r *http.Request) {
 			Items:   items,
 			Version: h.Version,
 		}
-		t, err := template.New("fileList").Parse(h.Box.String("templates/fileList.html"))
+		tpl, err := h.Box.FindString("templates/fileList.html")
+		utils.CheckError(err)
+		t, err := template.New("fileList").Parse(tpl)
 		utils.CheckError(err)
 		w.WriteHeader(http.StatusOK)
 		err = t.Execute(w.Writer, data)
@@ -187,7 +191,9 @@ func (h SimpleHTTPServer) post(w *loggingResponseWriter, r *http.Request) {
 		err = f.Close()
 		utils.CheckError(err)
 	}
-	resultPage, err := template.New("uploaded").Parse(h.Box.String("templates/uploaded.html"))
+	tpl, err := h.Box.FindString("templates/uploaded.html")
+	utils.CheckError(err)
+	resultPage, err := template.New("uploaded").Parse(tpl)
 	utils.CheckError(err)
 	data := struct {
 		FileNames []string
