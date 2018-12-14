@@ -6,6 +6,8 @@ notifications:
 
 install:
   - go get -v github.com/gobuffalo/packr/v2/...
+  - go get -v github.com/inconshreveable/mousetrap
+  - go get -v github.com/konsorten/go-windows-terminal-sequences
 
 script:
   - ./build.sh
