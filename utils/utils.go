@@ -69,6 +69,7 @@ func IsSourceCode(filename string) (bool, string) {
 		".hpp":     "cpp",
 		".hs":      "haskell",
 		".ini":     "ini",
+		".ino":     "cpp",
 		".java":    "java",
 		".js":      "javascript",
 		".json":    "json",
