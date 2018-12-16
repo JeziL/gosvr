@@ -88,7 +88,9 @@
         });
 
         function generateFileInfo(code) {
-            $('#lineCount').text(`${code.split(/\r\n|\r|\n/).length} lines`);
+            let lineCount = code.split(/\r\n|\r|\n/).length;
+            let pl = (lineCount > 1) ? "s" : "";
+            $('#lineCount').text(`${lineCount} line${pl}`);
         }
 
         function generateNav(path) {
