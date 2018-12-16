@@ -8,7 +8,7 @@ ds:
 	find . -name '*.DS_Store' -type f -delete
 
 static: ds
-	packr
+	packr2
 
 clean: ds
 	rm -f gosvr
