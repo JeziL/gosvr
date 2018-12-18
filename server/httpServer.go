@@ -100,6 +100,12 @@ func (h SimpleHTTPServer) serveSourceCode(w *loggingResponseWriter, r *http.Requ
 	absPath := h.absPath(filePath)
 	f, err := ioutil.ReadFile(absPath)
 	utils.CheckError(err)
+	fileContent := string(f)
+	lines := strings.Split(fileContent, "\n")
+	if len(lines) > 0 && len(lines[len(lines)-1]) == 0 {
+		lines = lines[:len(lines)-1]
+	}
+	fileContent = strings.Join(lines, "\n")
 	data := struct {
 		Path        string
 		Lang        string
@@ -109,7 +115,7 @@ func (h SimpleHTTPServer) serveSourceCode(w *loggingResponseWriter, r *http.Requ
 	}{
 		Path:        filePath,
 		Lang:        r.URL.Query().Get("lang"),
-		FileContent: string(f),
+		FileContent: fileContent,
 		FileSize:    utils.ByteToString(contentLength),
 		Version:     h.Version,
 	}
