@@ -72,7 +72,7 @@
             if ($(this).hasClass('active')) {
                 cardBody.removeClass('markdown-body');
                 cardBody.css('font-size', '12px');
-                cardBody.html(`<pre><code class="{{ .Lang }}"></code></pre>`);
+                cardBody.html(`<pre style="margin-bottom: 0; padding-bottom: 5px;"><code style="font-size: 12px;" class="{{ .Lang }}"></code></pre>`);
                 var code = $('code');
                 code.text(fileContent);
                 $(this).removeClass('active');
