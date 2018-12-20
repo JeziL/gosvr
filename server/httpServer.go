@@ -13,6 +13,7 @@ import (
 	"path"
 	"strconv"
 	"strings"
+	"time"
 
 	"github.com/JeziL/gosvr/utils"
 )
@@ -163,8 +164,7 @@ func (h SimpleHTTPServer) get(w *loggingResponseWriter, r *http.Request) {
 			h.serveSourceCode(w, r, filePath, contentLength)
 		} else {
 			mimeType := utils.GuessType(fi.Name())
-			const rfc2822 = "Mon, 02 Jan 15:04:05 -0700 2006"
-			lastModified := fi.ModTime().Format(rfc2822)
+			lastModified := fi.ModTime().In(time.UTC).Format(http.TimeFormat)
 			w.Header().Set("Content-type", mimeType)
 			w.Header().Set("Content-Length", strconv.FormatInt(contentLength, 10))
 			w.Header().Set("Last-Modified", lastModified)
