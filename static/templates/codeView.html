@@ -60,7 +60,7 @@
             var converter = new showdown.Converter();
             converter.setFlavor('github');
             var html = converter.makeHtml(md);
-            $('.markdown-body').html(html);
+            $('.markdown-body').empty().html(html);
         }
 
         $('button#raw').on('click', function () {
@@ -72,7 +72,7 @@
             if ($(this).hasClass('active')) {
                 cardBody.removeClass('markdown-body');
                 cardBody.css('font-size', '12px');
-                cardBody.html(`<pre style="margin-bottom: 0; padding-bottom: 5px;"><code style="font-size: 12px;" class="{{ .Lang }}"></code></pre>`);
+                cardBody.empty().html('<pre style="margin-bottom: 0; padding-bottom: 5px;"><code style="font-size: 12px;" class="' + {{ .Lang }} + '"></code></pre>');
                 var code = $('code');
                 code.text(fileContent);
                 $(this).removeClass('active');
@@ -90,7 +90,7 @@
         function generateFileInfo(code) {
             let lineCount = code.split(/\r\n|\r|\n/).length;
             let pl = (lineCount > 1) ? "s" : "";
-            $('#lineCount').text(`${lineCount} line${pl}`);
+            $('#lineCount').text(lineCount + " line" + pl);
         }
 
         function generateNav(path) {
@@ -100,11 +100,11 @@
                 for (let i = 1; i < pathComponents.length; i++) {
                     let pc = pathComponents[i];
                     if (i !== pathComponents.length - 1) {
-                        pathAccumulated += `/${pc}`;
-                        $('ol.breadcrumb').append(`<li class="breadcrumb-item"><a href="${pathAccumulated}">${pc}</a></li>`);
+                        pathAccumulated += "/" + pc;
+                        $('ol.breadcrumb').append('<li class="breadcrumb-item"><a href="' + pathAccumulated + '">' + pc + '</a></li>');
                     }
                     else {
-                        $('ol.breadcrumb').append(`<li class="breadcrumb-item active" aria-current="page">${pc}</li>`);
+                        $('ol.breadcrumb').append('<li class="breadcrumb-item active" aria-current="page">' + pc + '</li>');
                     }
                 }
             }
