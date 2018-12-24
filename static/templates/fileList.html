@@ -152,11 +152,36 @@
             let fileName = [].slice.call(fileNames).map(function(fn){return fn.name;}).join(', ');
             $(this).next('.custom-file-label').empty().html(fileName);
         });
-        $('input[type=submit]').on('click', function () {
+        $('input[type=submit]').on('click', function (e) {
             if ($('.custom-file-label').html() === "Choose file ...") {
                 $('div.alert').css("display", "block");
                 return false;
             }
+            var xhr = new XMLHttpRequest();
+            if (!(xhr && ("upload" in xhr) && ("onprogress" in xhr.upload)) || !window.FormData) {
+                return;
+            }
+            e.preventDefault();
+            // TODO: Progress bar.
+            xhr.upload.addEventListener("loadstart", function (e){
+                console.log("!!!start!!!");
+            }, false);
+            xhr.upload.addEventListener("progress", function (e) {
+                let percent = (100 * e.loaded / e.total);
+                console.log(percent.toFixed(2));
+            }, false);
+            xhr.upload.addEventListener("load", function () {
+                console.log("!!!Completed!!!");
+            }, false);
+            xhr.addEventListener("readystatechange", function (e) {
+                if (e.target.readyState === 4 && e.target.responseText) {
+                    var newDocument = document.open('text/html', 'replace');
+                    newDocument.write(e.target.responseText);
+                    newDocument.close();
+                }
+            }, false);
+            xhr.open("post", "/", true);
+            xhr.send(new FormData($("form").get(0)));
         });
         $('button.close').on('click', function () {
             $('div.alert').css("display", "none");
