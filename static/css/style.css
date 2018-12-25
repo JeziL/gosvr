@@ -115,3 +115,7 @@ td.hljs-ln-code {
     outline: none!important;
     box-shadow: none!important;
 }
+
+div.progress {
+    margin-top: 10px;
+}

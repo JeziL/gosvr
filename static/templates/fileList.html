@@ -41,6 +41,9 @@
                         </div>
                     </div>
                 </form>
+                <div class="progress" style="display: none;">
+                    <div class="progress-bar" role="progressbar" style="width: 0%;" aria-valuemin="0" aria-valuemax="100"></div>
+                </div>
             </div>
             <ul class="list-group list-group-flush">
                 {{ range .Items }}
@@ -157,25 +160,28 @@
                 $('div.alert').css("display", "block");
                 return false;
             }
-            var xhr = new XMLHttpRequest();
+            let xhr = new XMLHttpRequest();
             if (!(xhr && ("upload" in xhr) && ("onprogress" in xhr.upload)) || !window.FormData) {
                 return;
             }
             e.preventDefault();
-            // TODO: Progress bar.
+            let progress = $("div.progress");
+            let progressBar = $("div.progress-bar");
             xhr.upload.addEventListener("loadstart", function (e){
-                console.log("!!!start!!!");
+                progress.css("display", "flex");
+                progressBar.css("width", "0%");
             }, false);
             xhr.upload.addEventListener("progress", function (e) {
                 let percent = (100 * e.loaded / e.total);
-                console.log(percent.toFixed(2));
+                progressBar.css("width", percent.toFixed(2) + "%");
             }, false);
             xhr.upload.addEventListener("load", function () {
-                console.log("!!!Completed!!!");
+                progressBar.addClass("progress-bar-striped");
+                progressBar.addClass("progress-bar-animated");
             }, false);
             xhr.addEventListener("readystatechange", function (e) {
                 if (e.target.readyState === 4 && e.target.responseText) {
-                    var newDocument = document.open('text/html', 'replace');
+                    let newDocument = document.open('text/html', 'replace');
                     newDocument.write(e.target.responseText);
                     newDocument.close();
                 }
