@@ -35,7 +35,7 @@ optional arguments:
   -d DIR     Root directory to serve files from. (default ".")
   -p PORT    Port number of the HTTP service. (default "8080")
   -v         Version number of gosvr
-  -h         Help info.
+  -h         Help info
 ```
 
 ## Powered by
