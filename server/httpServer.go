@@ -194,6 +194,8 @@ func (h SimpleHTTPServer) post(w *loggingResponseWriter, r *http.Request) {
 		utils.CheckError(err)
 		_, err = io.Copy(fw, f)
 		utils.CheckError(err)
+		err = fw.Close()
+		utils.CheckError(err)
 		err = f.Close()
 		utils.CheckError(err)
 	}
