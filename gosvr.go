@@ -13,7 +13,7 @@ import (
 	"github.com/JeziL/gosvr/server"
 )
 
-const _Version = "1.0.2"
+const _Version = "1.0.3"
 
 func main() {
 	var dir = flag.String("d", ".", "Root directory to serve files from.")
