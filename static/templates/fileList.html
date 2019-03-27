@@ -206,8 +206,10 @@
                 data: fd,
                 contentType: false,
                 processData: false,
-                success: function (msg) {
-                    location.reload();
+                complete: function (xhr, msg) {
+                    if (xhr.status === 200) {
+                        location.reload();
+                    }
                 }
             });
         });
@@ -234,8 +236,10 @@
                 data: fd,
                 contentType: false,
                 processData: false,
-                success: function (msg) {
-                    location.reload();
+                complete: function (xhr, msg) {
+                    if (xhr.status === 200) {
+                        location.reload();
+                    }
                 }
             });
         });
