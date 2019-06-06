@@ -4,9 +4,31 @@ import (
 	"fmt"
 	"log"
 	"mime"
+	"net"
 	"os"
 	"path"
+	"strings"
 )
+
+// LocalIPs return all local IP addresses in 192.168.0.0/16.
+func LocalIPs() []string {
+	var ips []string
+	ifaces, err := net.Interfaces()
+	CheckError(err)
+	for _, i := range ifaces {
+		addrs, err := i.Addrs()
+		CheckError(err)
+		for _, addr := range addrs {
+			switch v := addr.(type) {
+			case *net.IPNet:
+				if strings.HasPrefix(v.IP.String(), "192.168") {
+					ips = append(ips, v.IP.String())
+				}
+			}
+		}
+	}
+	return ips
+}
 
 // IsDir determines if a path is a directory.
 func IsDir(filePath string) bool {

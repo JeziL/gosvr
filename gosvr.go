@@ -3,6 +3,7 @@ package main
 import (
 	"flag"
 	"fmt"
+	"github.com/JeziL/gosvr/utils"
 	"github.com/gobuffalo/packr/v2"
 	"log"
 	"net/http"
@@ -13,7 +14,7 @@ import (
 	"github.com/JeziL/gosvr/server"
 )
 
-const _Version = "1.0.3"
+const _Version = "1.0.4"
 
 func main() {
 	var dir = flag.String("d", ".", "Root directory to serve files from.")
@@ -34,6 +35,10 @@ func main() {
 		WriteTimeout:   5 * time.Minute,
 		MaxHeaderBytes: 1 << 20,
 	}
-	log.Printf("Serving HTTP on 0.0.0.0 port %s (http://0.0.0.0:%s/) ...", *port, *port)
+	log.Println("Local IPs:")
+	for _, ip := range utils.LocalIPs() {
+		log.Printf("\t%s", ip)
+	}
+	log.Printf("Serving HTTP on 0.0.0.0 port %s (http://localhost:%s/) ...", *port, *port)
 	log.Fatal(server.ListenAndServe())
 }
