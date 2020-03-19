@@ -3,7 +3,7 @@
 VERSION=$(grep -Po '_Version = "(\d+\.){2}\d+"' gosvr.go | cut -d\" -f2)
 make cleanall
 mkdir release
-declare -a arr=("darwin_386" "darwin_amd64" "linux_386" "linux_amd64" "windows_386" "windows_amd64")
+declare -a arr=("darwin_386" "darwin_amd64" "linux_386" "linux_amd64" "linux_arm" "windows_386" "windows_amd64")
 for i in "${arr[@]}"
 do
     packr2 clean
