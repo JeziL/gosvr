@@ -119,6 +119,7 @@ func IsSourceCode(filename string) (bool, string) {
 		".vhdl":    "vhdl",
 		".xml":     "xml",
 		".yml":     "yaml",
+		".yaml":    "yaml",
 	}
 	var langNameMap = map[string]string{
 		"makefile": "makefile",
