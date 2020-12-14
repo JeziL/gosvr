@@ -3,18 +3,18 @@ package main
 import (
 	"flag"
 	"fmt"
-	"github.com/JeziL/gosvr/utils"
-	"github.com/gobuffalo/packr/v2"
 	"log"
 	"net/http"
 	"os"
 	"runtime"
-	"time"
 
-	"github.com/JeziL/gosvr/server"
+	"github.com/JeziL/gosvr/utils"
+	"github.com/gobuffalo/packr/v2"
+
+	gosvr "github.com/JeziL/gosvr/server"
 )
 
-const _Version = "1.0.5"
+const _Version = "1.0.6"
 
 func main() {
 	var dir = flag.String("d", ".", "Root directory to serve files from.")
