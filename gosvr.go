@@ -31,8 +31,6 @@ func main() {
 	server := &http.Server{
 		Addr:           ":" + *port,
 		Handler:        gosvr.HTTPHandlerWrapper(gosvr.SimpleHTTPServer{Root: *dir, Box: box, Version: _Version}),
-		ReadTimeout:    5 * time.Minute,
-		WriteTimeout:   5 * time.Minute,
 		MaxHeaderBytes: 1 << 20,
 	}
 	log.Println("Local IPs:")
