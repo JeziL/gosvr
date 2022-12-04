@@ -4,3 +4,4 @@ test*
 .idea/
 *packr.go
 release/
+vendor/
